@@ -9,70 +9,76 @@ export default function Preloader() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2500);
+    const timer = setTimeout(() => setLoading(false), 3000);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {loading && (
         <motion.div 
           className={styles.overlay}
+          key="loader"
           exit={{ 
             opacity: 0,
-            scale: 1.1,
-            transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } 
+            filter: 'brightness(2) blur(20px)',
+            transition: { duration: 0.8, ease: "easeInOut" } 
           }}
         >
-          {/* Animated Background Elements */}
-          <div className={styles.noise} />
-          <div className={styles.nebula} />
+          {/* Energy Portal Background */}
+          <div className={styles.portal} />
+          <div className={styles.scanline} />
           
           <div className={styles.content}>
+            {/* The Materializing Logo */}
             <motion.div 
-              className={styles.logoWrapper}
-              initial={{ opacity: 0, scale: 0.5, rotateY: -30 }}
-              animate={{ 
-                opacity: 1, 
-                scale: [1, 1.05, 1],
-                rotateY: [0, 5, 0],
-                y: [0, -10, 0]
-              }}
-              transition={{ 
-                opacity: { duration: 0.8 },
-                scale: { repeat: Infinity, duration: 4, ease: "easeInOut" },
-                rotateY: { repeat: Infinity, duration: 3, ease: "easeInOut" },
-                y: { repeat: Infinity, duration: 5, ease: "easeInOut" }
-              }}
+              className={styles.logoContainer}
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              transition={{ delay: 0.5, duration: 1, ease: [0.33, 1, 0.68, 1] }}
             >
-              <div className={styles.logoGlow} />
-              <div className={styles.logoIcon}>
+              <motion.div 
+                className={styles.logoFrame}
+                animate={{ 
+                  boxShadow: [
+                    "0 0 20px rgba(245, 158, 11, 0.2)",
+                    "0 0 60px rgba(245, 158, 11, 0.5)",
+                    "0 0 20px rgba(245, 158, 11, 0.2)"
+                  ]
+                }}
+                transition={{ repeat: Infinity, duration: 2 }}
+              >
                 <Image 
                   src="/icon.png" 
                   alt="VibeWalls" 
-                  width={140} 
-                  height={140} 
+                  width={150} 
+                  height={150} 
                   priority
                   className={styles.mainImg}
                 />
-              </div>
+              </motion.div>
             </motion.div>
 
-            {/* Minimal Progress Bar */}
-            <div className={styles.progressTrack}>
+            {/* Unique Energy Bar */}
+            <div className={styles.energyBarWrap}>
               <motion.div 
-                className={styles.progressBar}
-                initial={{ width: 0 }}
+                className={styles.energyLevel}
+                initial={{ width: '0%' }}
                 animate={{ width: '100%' }}
-                transition={{ duration: 2.2, ease: "circIn" }}
+                transition={{ duration: 2.5, ease: "easeInOut" }}
               />
+              <div className={styles.energyGlow} />
             </div>
           </div>
 
-          {/* Floating Particles (CSS only for performance) */}
-          <div className={styles.particles}>
-            {[...Array(12)].map((_, i) => (
-              <div key={i} className={styles.particle} />
+          {/* Sucking Particles Effect */}
+          <div className={styles.vortex}>
+            {[...Array(15)].map((_, i) => (
+              <div key={i} className={styles.particle} style={{
+                '--delay': `${Math.random() * 2}s`,
+                '--x': `${Math.random() * 100}%`,
+                '--y': `${Math.random() * 100}%`
+              } as any} />
             ))}
           </div>
         </motion.div>

@@ -1,37 +1,43 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: #050508;
+  background: #030305;
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  perspective: 1000px;
 }
 
-.noise {
+.portal {
   position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.04;
-  pointer-events: none;
-  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at center, rgba(124, 58, 237, 0.05) 0%, transparent 70%);
+  animation: portalPulse 4s ease-in-out infinite;
 }
 
-.nebula {
+@keyframes portalPulse {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.2); opacity: 0.6; }
+}
+
+.scanline {
   position: absolute;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, rgba(236, 72, 153, 0.05) 40%, transparent 70%);
-  filter: blur(80px);
-  z-index: 0;
-  animation: nebulaPulse 6s ease-in-out infinite alternate;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-gold), #fff, var(--accent-gold), transparent);
+  box-shadow: 0 0 30px var(--accent-gold);
+  z-index: 5;
+  animation: scanInit 1s ease-out forwards;
 }
 
-@keyframes nebulaPulse {
-  from { transform: scale(1) translate(-10%, -10%); opacity: 0.5; }
-  to { transform: scale(1.3) translate(10%, 10%); opacity: 0.8; }
+@keyframes scanInit {
+  0% { transform: scaleX(0); opacity: 0; }
+  50% { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 0.5; height: 1px; }
 }
 
 .content {
@@ -40,61 +46,58 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 60px;
+  gap: 40px;
 }
 
-.logoWrapper {
-  position: relative;
+.logoContainer {
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  transform-style: preserve-3d;
 }
 
-.logoGlow {
-  position: absolute;
-  inset: -20px;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.2), transparent 70%);
-  filter: blur(10px);
-  z-index: -1;
-  border-radius: 50%;
-}
-
-.logoIcon {
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 32px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.05);
+.logoFrame {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  padding: 15px;
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
 }
 
 .mainImg {
-  filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.3));
+  filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.3));
 }
 
-.progressTrack {
-  width: 160px;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.05);
+.energyBarWrap {
+  width: 200px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 10px;
+  position: relative;
   overflow: hidden;
 }
 
-.progressBar {
+.energyLevel {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-primary), var(--accent-pink), var(--accent-gold));
-  background-size: 200% 100%;
-  animation: flow 2s linear infinite;
+  background: linear-gradient(90deg, #7c3aed, #db2777, #f59e0b);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
 }
 
-@keyframes flow {
-  0% { background-position: 100% 0%; }
-  100% { background-position: -100% 0%; }
+.energyGlow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: sweep 1.5s linear infinite;
 }
 
-/* Particles */
-.particles {
+@keyframes sweep {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+/* Vortex Particles */
+.vortex {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -102,20 +105,20 @@
 
 .particle {
   position: absolute;
-  width: 2px;
-  height: 2px;
-  background: #fff;
+  top: var(--y);
+  left: var(--x);
+  width: 3px;
+  height: 3px;
+  background: var(--accent-gold);
   border-radius: 50%;
-  opacity: 0.2;
+  filter: blur(1px);
+  animation: suckIn 3s linear infinite;
+  animation-delay: var(--delay);
+  opacity: 0;
 }
 
-.particle:nth-child(1) { top: 20%; left: 10%; animation: float 8s infinite; }
-.particle:nth-child(2) { top: 80%; left: 20%; animation: float 12s infinite 1s; }
-.particle:nth-child(3) { top: 40%; left: 85%; animation: float 10s infinite 2s; }
-.particle:nth-child(4) { top: 10%; left: 70%; animation: float 15s infinite 0.5s; }
-/* ... and so on */
-
-@keyframes float {
-  0%, 100% { transform: translate(0, 0); opacity: 0.2; }
-  50% { transform: translate(20px, -40px); opacity: 0.5; }
+@keyframes suckIn {
+  0% { transform: translate(0, 0) scale(1); opacity: 0; }
+  20% { opacity: 0.6; }
+  100% { transform: translate(calc(50vw - var(--x)), calc(50vh - var(--y))) scale(0); opacity: 0; }
 }
