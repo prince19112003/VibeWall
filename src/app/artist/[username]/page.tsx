@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, use } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar/Navbar';
@@ -6,8 +9,9 @@ import { MOCK_WALLPAPERS } from '@/lib/mockData';
 import styles from './artist.module.css';
 import Link from 'next/link';
 
-export default async function ArtistPage({ params }: { params: Promise<{ username: string }> }) {
-  const { username } = await params;
+export default function ArtistPage({ params }: { params: Promise<{ username: string }> }) {
+  const resolvedParams = use(params);
+  const username = resolvedParams.username;
   const artistWallpapers = MOCK_WALLPAPERS.filter(w => w.artist.username === username);
   const artist = artistWallpapers[0]?.artist ?? {
     name: username,

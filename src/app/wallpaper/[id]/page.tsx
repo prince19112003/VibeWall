@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, use } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -8,8 +8,9 @@ import Navbar from '@/components/Navbar/Navbar';
 import { MOCK_WALLPAPERS } from '@/lib/mockData';
 import styles from './wallpaper.module.css';
 
-export default async function WallpaperDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default function WallpaperDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params);
+  const id = resolvedParams.id;
   const wallpaper = MOCK_WALLPAPERS.find(w => w.id === id) ?? MOCK_WALLPAPERS[0];
   const related = MOCK_WALLPAPERS.filter(w => w.id !== wallpaper.id && w.category === wallpaper.category).slice(0, 4);
 
