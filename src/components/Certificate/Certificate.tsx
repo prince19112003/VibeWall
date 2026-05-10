@@ -59,10 +59,7 @@ export default function Certificate({
           <div className={styles.header}>
             <div className={styles.logo}>
               <div className={styles.logoIcon}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z" fill="#000" />
-                  <path d="M2 17l10 5 10-5" stroke="#000" strokeWidth="2" />
-                </svg>
+                <Image src="/icon.png" alt="Logo" width={40} height={40} style={{ borderRadius: '8px' }} />
               </div>
               <span className={styles.logoText}>VibeWalls <span className={styles.official}>OFFICIAL</span></span>
             </div>

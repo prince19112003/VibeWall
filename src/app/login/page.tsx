@@ -1,7 +1,6 @@
-'use client';
-
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import styles from './login.module.css';
 
@@ -22,11 +21,7 @@ export default function LoginPage() {
       {/* Logo */}
       <Link href="/" className={styles.logo}>
         <div className={styles.logoIcon}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2L2 7l10 5 10-5-10-5z" fill="currentColor" opacity="0.9"/>
-            <path d="M2 17l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            <path d="M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.6"/>
-          </svg>
+          <Image src="/icon.png" alt="Logo" width={28} height={28} />
         </div>
         <span className={styles.logoText}>Vibe<span className="gradient-text">Walls</span></span>
       </Link>
