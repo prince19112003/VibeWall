@@ -7,8 +7,17 @@ import styles from './Preloader.module.css';
 
 export default function Preloader() {
   const [loading, setLoading] = useState(true);
+  const [particles, setParticles] = useState<any[]>([]);
 
   useEffect(() => {
+    // Generate particles only on client to avoid hydration mismatch
+    const newParticles = [...Array(15)].map(() => ({
+      delay: `${Math.random() * 2}s`,
+      x: `${Math.random() * 100}%`,
+      y: `${Math.random() * 100}%`
+    }));
+    setParticles(newParticles);
+
     const timer = setTimeout(() => setLoading(false), 3000);
     return () => clearTimeout(timer);
   }, []);
@@ -73,11 +82,11 @@ export default function Preloader() {
 
           {/* Sucking Particles Effect */}
           <div className={styles.vortex}>
-            {[...Array(15)].map((_, i) => (
+            {particles.map((p, i) => (
               <div key={i} className={styles.particle} style={{
-                '--delay': `${Math.random() * 2}s`,
-                '--x': `${Math.random() * 100}%`,
-                '--y': `${Math.random() * 100}%`
+                '--delay': p.delay,
+                '--x': p.x,
+                '--y': p.y
               } as any} />
             ))}
           </div>
