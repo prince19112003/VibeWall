@@ -30,10 +30,7 @@ export default function Preloader() {
               transition={{ duration: 0.5 }}
             >
               <div className={styles.logoIcon}>
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z" fill="currentColor" />
-                  <path d="M2 17l10 5 10-5" stroke="currentColor" strokeWidth="2" />
-                </svg>
+                <Image src="/icon.png" alt="VibeWalls" width={48} height={48} style={{ borderRadius: '12px' }} />
               </div>
               <h1 className={styles.logoText}>Vibe<span className="gradient-text">Walls</span></h1>
             </motion.div>

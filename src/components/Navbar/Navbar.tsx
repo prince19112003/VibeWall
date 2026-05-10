@@ -38,17 +38,11 @@ export default function Navbar() {
       >
         <div className={styles.navInner}>
           {/* Logo */}
-          <Link href="/" className={styles.logo} aria-label="VibeWalls Home">
-            <div className={styles.logoIcon} aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2L2 7l10 5 10-5-10-5z" fill="currentColor" opacity="0.9"/>
-                <path d="M2 17l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                <path d="M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.6"/>
-              </svg>
+          <Link href="/" className={styles.logo}>
+            <div className={styles.logoIcon}>
+              <Image src="/icon.png" alt="Logo" width={32} height={32} style={{ borderRadius: '8px' }} />
             </div>
-            <span className={styles.logoText}>
-              Vibe<span className={styles.logoAccent}>Walls</span>
-            </span>
+            <span className={styles.logoText}>Vibe<span className="gradient-text">Walls</span></span>
           </Link>
 
           {/* Desktop Nav Links */}
