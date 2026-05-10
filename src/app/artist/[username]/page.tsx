@@ -31,7 +31,7 @@ export default function ArtistPage({ params }: { params: Promise<{ username: str
         {/* Cover Banner */}
         <div className={styles.cover}>
           <Image
-            src={artistWallpapers[0]?.imageUrl ?? `https://picsum.photos/seed/${params.username}cover/1920/600`}
+            src={artistWallpapers[0]?.imageUrl ?? `https://picsum.photos/seed/${username}cover/1920/600`}
             alt="Cover"
             fill
             className={styles.coverImg}
