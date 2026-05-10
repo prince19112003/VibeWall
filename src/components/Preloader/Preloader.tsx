@@ -26,14 +26,19 @@ export default function Preloader() {
           <div className={styles.content}>
             <motion.div 
               className={styles.logo}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ 
+                opacity: 1, 
+                scale: [1, 1.1, 1],
+              }}
+              transition={{ 
+                opacity: { duration: 0.5 },
+                scale: { repeat: Infinity, duration: 2, ease: "easeInOut" }
+              }}
             >
               <div className={styles.logoIcon}>
-                <Image src="/icon.png" alt="VibeWalls" width={48} height={48} style={{ borderRadius: '12px' }} />
+                <Image src="/icon.png" alt="VibeWalls" width={120} height={120} style={{ borderRadius: '24px' }} />
               </div>
-              <h1 className={styles.logoText}>Vibe<span className="gradient-text">Walls</span></h1>
             </motion.div>
             
             <div className={styles.track}>
@@ -44,13 +49,6 @@ export default function Preloader() {
                 transition={{ duration: 2, ease: "easeInOut" }}
               />
             </div>
-            <motion.p 
-              className={styles.status}
-              animate={{ opacity: [0, 1, 0] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-            >
-              Curating Premium Walls...
-            </motion.p>
           </div>
           
           {/* Decorative Rings */}
