@@ -5,52 +5,51 @@
    ============================================================ */
 
 :root {
-  /* Color Tokens */
-  --bg-primary: #080810;
-  --bg-secondary: #0f0f1a;
-  --bg-tertiary: #141428;
-  --bg-card: #12121f;
-  --bg-glass: rgba(255, 255, 255, 0.04);
-  --bg-glass-hover: rgba(255, 255, 255, 0.07);
+  /* Premium Obsidian Palette */
+  --bg-primary: #030307;      /* Deepest Space Navy */
+  --bg-secondary: #080812;    /* Dark Layer */
+  --bg-tertiary: #0c0c1a;     /* Surface Layer */
+  --bg-card: #0b0b18;         /* Card Surface */
+  --bg-glass: rgba(255, 255, 255, 0.03);
+  --bg-glass-hover: rgba(255, 255, 255, 0.06);
 
-  /* Accent Colors */
-  --accent-primary: #7c3aed;
-  --accent-secondary: #a855f7;
-  --accent-tertiary: #c084fc;
-  --accent-pink: #ec4899;
-  --accent-cyan: #06b6d4;
-  --accent-gold: #f59e0b;
-  --accent-glow: rgba(124, 58, 237, 0.4);
-  --accent-glow-strong: rgba(124, 58, 237, 0.6);
+  /* Refined Accent Colors */
+  --accent-primary: #8b5cf6;  /* Electric Amethyst */
+  --accent-secondary: #a78bfa; /* Soft Lavender */
+  --accent-tertiary: #c4b5fd; /* Pale Violet */
+  --accent-pink: #f472b6;     /* Rose Glow */
+  --accent-cyan: #22d3ee;     /* Electric Cyan */
+  --accent-gold: #fbbf24;     /* Solar Gold */
+  --accent-glow: rgba(139, 92, 246, 0.3);
+  --accent-glow-strong: rgba(139, 92, 246, 0.5);
 
-  /* Text */
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #475569;
-  --text-accent: #a855f7;
+  /* Luxury Text Palette */
+  --text-primary: #f8fafc;    /* Ghost White */
+  --text-secondary: #94a3b8;  /* Cool Slate */
+  --text-muted: #64748b;      /* Muted Slate */
+  --text-accent: #a78bfa;
 
-  /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-medium: rgba(255, 255, 255, 0.1);
-  --border-accent: rgba(124, 58, 237, 0.4);
+  /* Premium Borders */
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-medium: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(139, 92, 246, 0.3);
 
-  /* Spacing */
-  --nav-height: 70px;
+  /* Spacing & Sizing */
+  --nav-height: 72px;
   --max-width: 1440px;
-  --grid-gap: 12px;
+  --grid-gap: 16px;
 
-  /* Radius */
+  /* Radius System */
   --radius-sm: 8px;
   --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  --radius-lg: 22px;
+  --radius-xl: 32px;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
-  --shadow-glow: 0 0 40px rgba(124, 58, 237, 0.25);
-  --shadow-glow-strong: 0 0 60px rgba(124, 58, 237, 0.5);
-
+  /* Deep Elevation Shadows */
+  --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 30px rgba(139, 92, 246, 0.2);
+  --shadow-glow-strong: 0 0 50px rgba(139, 92, 246, 0.4);
   /* Transitions */
   --transition-fast: 0.15s ease;
   --transition-base: 0.25s ease;
@@ -141,7 +140,7 @@ input, textarea {
    GRADIENT TEXT
    ============================================================ */
 .gradient-text {
-  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 40%, #ec4899 100%);
+  background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent-primary) 40%, var(--accent-pink) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -352,15 +351,17 @@ input, textarea {
   background: var(--accent-primary);
   top: -20%;
   left: -10%;
+  opacity: 0.08; /* Subtler */
   animation-delay: 0s;
 }
 
 .bg-blob-2 {
   width: 500px;
   height: 500px;
-  background: var(--accent-pink);
+  background: var(--accent-gold); /* Changed to Gold for better harmony */
   bottom: -15%;
   right: -5%;
+  opacity: 0.06;
   animation-delay: -4s;
 }
 
@@ -371,6 +372,7 @@ input, textarea {
   top: 40%;
   left: 50%;
   transform: translateX(-50%);
+  opacity: 0.05;
   animation-delay: -8s;
 }
 

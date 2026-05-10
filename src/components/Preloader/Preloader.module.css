@@ -33,12 +33,12 @@
 }
 
 .purpleBlob {
-  background: #A855F7;
+  background: #8b5cf6; /* Updated to Electric Amethyst */
   animation: movePurple 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 
 .goldBlob {
-  background: #F59E0B;
+  background: #fbbf24; /* Updated to Solar Gold */
   animation: moveGold 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 
@@ -124,7 +124,7 @@
 .logoAura {
   position: absolute;
   inset: -15px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
   border-radius: 50%;
   animation: auraPulse 3s ease-in-out infinite;
 }
@@ -135,7 +135,7 @@
 }
 
 .mainImg {
-  filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.4));
+  filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.4));
   mix-blend-mode: screen;
   backface-visibility: hidden;
 }
@@ -153,6 +153,6 @@
 .progressFill {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, #A855F7, #F59E0B);
+  background: linear-gradient(90deg, #8b5cf6, #fbbf24);
   will-change: transform;
 }
