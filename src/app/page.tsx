@@ -2,11 +2,22 @@
 
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
+import Link from 'next/link';
 import Navbar from '@/components/Navbar/Navbar';
 import WallpaperCard from '@/components/WallpaperCard/WallpaperCard';
 import TournamentSection from '@/components/Tournament/TournamentSection';
 import { MOCK_WALLPAPERS, CATEGORIES } from '@/lib/mockData';
 import styles from './page.module.css';
+
+// Feature 4: Pick "Wallpaper of the Day" — deterministic using today's date
+function getDailyWallpaper() {
+  const today = new Date();
+  const dayIndex = (today.getFullYear() * 365 + today.getMonth() * 30 + today.getDate()) % MOCK_WALLPAPERS.length;
+  return MOCK_WALLPAPERS[dayIndex];
+}
+
+const dailyWall = getDailyWallpaper();
 
 export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -30,68 +41,48 @@ export default function HomePage() {
         {/* ============ HERO ============ */}
         <section className={styles.hero} aria-label="Hero section">
           <div className="container">
-            <motion.div
-              className={styles.heroContent}
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <motion.div
-                className={styles.heroBadge}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-              >
+            <motion.div className={styles.heroContent}
+              initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
+              <motion.div className={styles.heroBadge}
+                initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}>
                 <span className={styles.heroBadgeDot} aria-hidden="true" />
                 Community-Driven Wallpaper Platform
               </motion.div>
 
-              <motion.h1
-                className={styles.heroTitle}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              >
+              <motion.h1 className={styles.heroTitle}
+                initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}>
                 Discover Walls That
                 <br />
                 <span className="gradient-text">Speak Your Vibe</span>
               </motion.h1>
 
-              <motion.p
-                className={styles.heroSubtitle}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.45, duration: 0.6 }}
-              >
+              <motion.p className={styles.heroSubtitle}
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.45, duration: 0.6 }}>
                 Explore millions of stunning 4K &amp; 8K wallpapers crafted by the world&apos;s best artists.
                 Download free, upload yours, and build your perfect aesthetic.
               </motion.p>
 
-              <motion.div
-                className={styles.heroActions}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.6 }}
-              >
-                <button className="btn-primary" id="hero-explore" onClick={() => document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' })}>
+              <motion.div className={styles.heroActions}
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.6 }}>
+                <button className="btn-primary" id="hero-explore"
+                  onClick={() => document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' })}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
                   </svg>
                   <span>Explore Wallpapers</span>
                 </button>
-                <a href="/upload" className="btn-ghost" id="hero-upload">
-                  Upload Your Art
-                </a>
+                <a href="/upload" className="btn-ghost" id="hero-upload">Upload Your Art</a>
               </motion.div>
 
               {/* Stats */}
-              <motion.div
-                className={styles.heroStats}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8, duration: 0.6 }}
-                aria-label="Platform statistics"
-              >
+              <motion.div className={styles.heroStats}
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                transition={{ delay: 0.8, duration: 0.6 }} aria-label="Platform statistics">
                 {[
                   { value: '50K+', label: 'Wallpapers' },
                   { value: '8K', label: 'Max Resolution' },
@@ -108,16 +99,49 @@ export default function HomePage() {
           </div>
 
           {/* Scroll indicator */}
-          <motion.div
-            className={styles.scrollIndicator}
-            animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-            aria-hidden="true"
-          >
+          <motion.div className={styles.scrollIndicator}
+            animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+            aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M12 5v14M5 12l7 7 7-7"/>
             </svg>
           </motion.div>
+        </section>
+
+        {/* ============ FEATURE 4: DAILY VIBE ============ */}
+        <section className={styles.dailySection} aria-label="Wallpaper of the day">
+          <div className="container">
+            <motion.div
+              className={styles.dailyCard}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.7 }}
+            >
+              {/* Background image */}
+              <div className={styles.dailyBg}>
+                <Image src={dailyWall.imageUrl} alt="" fill className={styles.dailyBgImg} aria-hidden="true" />
+                <div className={styles.dailyOverlay} />
+              </div>
+
+              <div className={styles.dailyContent}>
+                <div className={styles.dailyBadge}>
+                  <span className={styles.dailyDot} />
+                  ✦ Vibe of the Day
+                </div>
+                <h2 className={styles.dailyTitle}>{dailyWall.title}</h2>
+                <p className={styles.dailyArtist}>by {dailyWall.artist.name}</p>
+                <div className={styles.dailyStats}>
+                  <span>⬇ {dailyWall.downloads.toLocaleString()}</span>
+                  <span>♥ {dailyWall.likes.toLocaleString()}</span>
+                  <span>📐 {dailyWall.resolution}</span>
+                </div>
+                <Link href={`/wallpaper/${dailyWall.id}`} className="btn-primary" id="daily-view" style={{ alignSelf: 'flex-start', marginTop: 8 }}>
+                  View &amp; Download
+                </Link>
+              </div>
+            </motion.div>
+          </div>
         </section>
 
         <TournamentSection />
@@ -125,27 +149,18 @@ export default function HomePage() {
         {/* ============ GALLERY SECTION ============ */}
         <section className={styles.gallerySection} id="gallery" aria-label="Wallpaper gallery">
           <div className="container">
-
             {/* Controls Row */}
             <div className={styles.controls}>
-              {/* Category Scroll Pills */}
               <div className={styles.categoryScroll} role="tablist" aria-label="Filter by category">
                 {CATEGORIES.map((cat, i) => (
-                  <motion.button
-                    key={cat.id}
+                  <motion.button key={cat.id}
                     className={`pill ${activeCategory === cat.id ? 'active' : ''}`}
-                    onClick={() => setActiveCategory(cat.id)}
-                    role="tab"
-                    aria-selected={activeCategory === cat.id}
-                    id={`cat-${cat.id}`}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    onClick={() => setActiveCategory(cat.id)} role="tab"
+                    aria-selected={activeCategory === cat.id} id={`cat-${cat.id}`}
+                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.04, duration: 0.4 }}
-                    whileHover={{ scale: 1.04 }}
-                    whileTap={{ scale: 0.96 }}
-                  >
-                    <span aria-hidden="true">{cat.icon}</span>
-                    {cat.label}
+                    whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
+                    <span aria-hidden="true">{cat.icon}</span>{cat.label}
                   </motion.button>
                 ))}
               </div>
@@ -154,13 +169,9 @@ export default function HomePage() {
               <div className={styles.sortRow}>
                 <span className={styles.sortLabel}>Sort:</span>
                 {(['trending', 'newest', 'downloads'] as const).map(s => (
-                  <button
-                    key={s}
+                  <button key={s}
                     className={`${styles.sortBtn} ${sortBy === s ? styles.sortActive : ''}`}
-                    onClick={() => setSortBy(s)}
-                    id={`sort-${s}`}
-                    aria-pressed={sortBy === s}
-                  >
+                    onClick={() => setSortBy(s)} id={`sort-${s}`} aria-pressed={sortBy === s}>
                     {s.charAt(0).toUpperCase() + s.slice(1)}
                   </button>
                 ))}
@@ -168,47 +179,26 @@ export default function HomePage() {
             </div>
 
             {/* Results count */}
-            <motion.p
-              className={styles.resultsCount}
-              key={activeCategory}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
-              aria-live="polite"
-            >
+            <motion.p className={styles.resultsCount} key={activeCategory}
+              initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }} aria-live="polite">
               Showing <strong>{filtered.length}</strong> wallpapers
               {activeCategory !== 'all' && ` in ${CATEGORIES.find(c => c.id === activeCategory)?.label}`}
             </motion.p>
 
             {/* Masonry Grid */}
             <AnimatePresence mode="wait">
-              <motion.div
-                key={activeCategory}
-                className={styles.masonryGrid}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                role="feed"
-                aria-label="Wallpaper grid"
-              >
+              <motion.div key={activeCategory} className={styles.masonryGrid}
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }} role="feed" aria-label="Wallpaper grid">
                 {filtered.map((wallpaper, index) => (
-                  <WallpaperCard
-                    key={wallpaper.id}
-                    wallpaper={wallpaper}
-                    index={index}
-                  />
+                  <WallpaperCard key={wallpaper.id} wallpaper={wallpaper} index={index} />
                 ))}
               </motion.div>
             </AnimatePresence>
 
             {/* Load More */}
-            <motion.div
-              className={styles.loadMoreWrap}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
+            <motion.div className={styles.loadMoreWrap} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
               <button className="btn-ghost" id="load-more" style={{ padding: '12px 32px' }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -223,13 +213,9 @@ export default function HomePage() {
         {/* ============ CTA SECTION ============ */}
         <section className={styles.ctaSection} aria-label="Call to action">
           <div className="container">
-            <motion.div
-              className={styles.ctaCard}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            >
+            <motion.div className={styles.ctaCard}
+              initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}>
               <div className={styles.ctaGlow} aria-hidden="true" />
               <div className={styles.ctaContent}>
                 <h2 className={styles.ctaTitle}>
@@ -244,15 +230,12 @@ export default function HomePage() {
                 <div className={styles.ctaActions}>
                   <a href="/upload" className="btn-primary" id="cta-upload">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                      <polyline points="17,8 12,3 7,8"/>
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/>
                       <line x1="12" y1="3" x2="12" y2="15"/>
                     </svg>
                     <span>Start Uploading — It&apos;s Free</span>
                   </a>
-                  <a href="/artists" className="btn-ghost" id="cta-artists">
-                    Browse Top Artists
-                  </a>
+                  <a href="/artists" className="btn-ghost" id="cta-artists">Browse Top Artists</a>
                 </div>
               </div>
 

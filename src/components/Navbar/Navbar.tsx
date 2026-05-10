@@ -10,6 +10,7 @@ const navLinks = [
   { href: '/', label: 'Discover' },
   { href: '/explore', label: 'Explore' },
   { href: '/artists', label: 'Artists' },
+  { href: '/feed', label: '👥 Feed' },
 ];
 
 export default function Navbar() {

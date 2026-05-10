@@ -396,3 +396,101 @@
   .heroActions { flex-direction: column; width: 100%; }
   .heroActions > * { width: 100%; justify-content: center; }
 }
+
+/* ══════════════════════════════
+   FEATURE 4: Daily Vibe Banner
+══════════════════════════════ */
+.dailySection {
+  padding: 20px 0 40px;
+}
+
+.dailyCard {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  min-height: 300px;
+  display: flex;
+  align-items: flex-end;
+  border: 1px solid var(--border-subtle);
+}
+
+.dailyBg {
+  position: absolute;
+  inset: 0;
+}
+
+.dailyBgImg {
+  object-fit: cover;
+}
+
+.dailyOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(4, 4, 12, 0.92) 0%,
+    rgba(4, 4, 12, 0.7) 50%,
+    rgba(4, 4, 12, 0.2) 100%
+  );
+}
+
+.dailyContent {
+  position: relative;
+  z-index: 2;
+  padding: 40px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 520px;
+}
+
+.dailyBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  letter-spacing: 0.06em;
+  width: fit-content;
+}
+
+.dailyDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  animation: pulse-glow 2s infinite;
+}
+
+.dailyTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.dailyArtist {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+}
+
+.dailyStats {
+  display: flex;
+  gap: 16px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .dailyContent { padding: 28px 24px; }
+  .dailyCard { min-height: 240px; }
+}
+

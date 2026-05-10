@@ -319,3 +319,203 @@
   .downloadBtn { flex: 1 1 100%; }
 }
 @media (max-width: 480px) { .relatedGrid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ══════════════════════════════
+   FEATURE 1: Device Preview
+══════════════════════════════ */
+.devicePreviewRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.deviceLabel {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.deviceBtns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.deviceBtn {
+  padding: 6px 14px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.deviceBtn:hover { color: var(--text-primary); border-color: var(--border-medium); }
+.deviceBtnActive {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: var(--border-accent);
+  color: var(--accent-tertiary);
+}
+
+.deviceMockupWrap {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+/* Phone Mockup */
+.phoneMockup {
+  width: 160px;
+  background: #1a1a2e;
+  border-radius: 28px;
+  border: 3px solid rgba(255,255,255,0.15);
+  padding: 8px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.05);
+}
+.phoneScreen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9/19;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #000;
+}
+.phoneNotch {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 14px;
+  background: #1a1a2e;
+  border-radius: 8px;
+  z-index: 10;
+}
+
+/* Desktop Mockup */
+.desktopMockup {
+  width: 300px;
+  background: #1a1a2e;
+  border-radius: 12px;
+  border: 3px solid rgba(255,255,255,0.15);
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+}
+.desktopTopBar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  background: rgba(0,0,0,0.4);
+  flex-shrink: 0;
+}
+.desktopDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.desktopScreen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: #000;
+}
+.mockupImg {
+  object-fit: cover;
+}
+
+/* ══════════════════════════════
+   FEATURE 5: Mini Image Editor
+══════════════════════════════ */
+.editorToggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.editorBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.editorBtn:hover { color: var(--text-primary); border-color: var(--border-medium); }
+.editorBtnActive {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: var(--border-accent);
+  color: var(--accent-tertiary);
+}
+.resetBtn {
+  padding: 8px 14px;
+  background: none;
+  border: 1px solid rgba(236,72,153,0.3);
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #ec4899;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.resetBtn:hover { background: rgba(236,72,153,0.1); }
+
+.editor {
+  background: var(--bg-glass);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+}
+.sliderRow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sliderLabel {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.sliderValue {
+  color: var(--accent-tertiary);
+  font-family: 'Space Grotesk', monospace;
+}
+.slider {
+  width: 100%;
+  height: 4px;
+  appearance: none;
+  background: var(--border-medium);
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-pink));
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.4);
+}
+.editorNote {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  padding-top: 4px;
+  border-top: 1px solid var(--border-subtle);
+}
+
