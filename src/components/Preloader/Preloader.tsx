@@ -9,7 +9,7 @@ export default function Preloader() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2200);
+    const timer = setTimeout(() => setLoading(false), 2500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -19,41 +19,62 @@ export default function Preloader() {
         <motion.div 
           className={styles.overlay}
           exit={{ 
-            y: '-100%',
+            opacity: 0,
+            scale: 1.1,
             transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } 
           }}
         >
+          {/* Animated Background Elements */}
+          <div className={styles.noise} />
+          <div className={styles.nebula} />
+          
           <div className={styles.content}>
             <motion.div 
-              className={styles.logo}
-              initial={{ opacity: 0, scale: 0.5 }}
+              className={styles.logoWrapper}
+              initial={{ opacity: 0, scale: 0.5, rotateY: -30 }}
               animate={{ 
                 opacity: 1, 
-                scale: [1, 1.1, 1],
+                scale: [1, 1.05, 1],
+                rotateY: [0, 5, 0],
+                y: [0, -10, 0]
               }}
               transition={{ 
-                opacity: { duration: 0.5 },
-                scale: { repeat: Infinity, duration: 2, ease: "easeInOut" }
+                opacity: { duration: 0.8 },
+                scale: { repeat: Infinity, duration: 4, ease: "easeInOut" },
+                rotateY: { repeat: Infinity, duration: 3, ease: "easeInOut" },
+                y: { repeat: Infinity, duration: 5, ease: "easeInOut" }
               }}
             >
+              <div className={styles.logoGlow} />
               <div className={styles.logoIcon}>
-                <Image src="/icon.png" alt="VibeWalls" width={120} height={120} style={{ borderRadius: '24px' }} />
+                <Image 
+                  src="/icon.png" 
+                  alt="VibeWalls" 
+                  width={140} 
+                  height={140} 
+                  priority
+                  className={styles.mainImg}
+                />
               </div>
             </motion.div>
-            
-            <div className={styles.track}>
+
+            {/* Minimal Progress Bar */}
+            <div className={styles.progressTrack}>
               <motion.div 
-                className={styles.bar}
+                className={styles.progressBar}
                 initial={{ width: 0 }}
                 animate={{ width: '100%' }}
-                transition={{ duration: 2, ease: "easeInOut" }}
+                transition={{ duration: 2.2, ease: "circIn" }}
               />
             </div>
           </div>
-          
-          {/* Decorative Rings */}
-          <div className={styles.ring1} />
-          <div className={styles.ring2} />
+
+          {/* Floating Particles (CSS only for performance) */}
+          <div className={styles.particles}>
+            {[...Array(12)].map((_, i) => (
+              <div key={i} className={styles.particle} />
+            ))}
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
