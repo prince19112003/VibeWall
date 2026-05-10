@@ -1,13 +1,11 @@
-'use client';
-
 import { useState, use } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar/Navbar';
 import WallpaperCard from '@/components/WallpaperCard/WallpaperCard';
 import { MOCK_WALLPAPERS } from '@/lib/mockData';
 import styles from './artist.module.css';
-import Link from 'next/link';
 
 export default function ArtistPage({ params }: { params: Promise<{ username: string }> }) {
   const resolvedParams = use(params);
