@@ -143,3 +143,33 @@
 .emptyIcon {
   font-size: 3rem;
 }
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+  .header {
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .avatarWrap {
+    width: 60px;
+    height: 60px;
+  }
+  .avatar {
+    width: 60px;
+    height: 60px;
+  }
+  .artistName {
+    font-size: 0.9rem;
+  }
+  .artistStats {
+    font-size: 0.7rem;
+  }
+}

@@ -228,4 +228,4 @@
   .avatarWrap { width: 80px; height: 80px; }
   .avatar { width: 80px; height: 80px; }
 }
-@media (max-width: 480px) { .masonryGrid { columns: 1; } }
+@media (max-width: 480px) { .masonryGrid { columns: 2; column-gap: 8px; } }

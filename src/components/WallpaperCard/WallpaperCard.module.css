@@ -22,6 +22,14 @@
   overflow: hidden;
 }
 
+/* Expanded click area: makes the whole card clickable for preview */
+.imageLink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+}
+
 .imageWrapper {
   position: relative;
   width: 100%;
@@ -125,6 +133,9 @@
   justify-content: space-between;
   padding: 10px 12px;
   gap: 8px;
+  position: relative;
+  z-index: 10; /* Above the expanded link area */
+  pointer-events: auto;
 }
 
 .artistInfo {
