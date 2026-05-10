@@ -8,8 +8,9 @@ import Navbar from '@/components/Navbar/Navbar';
 import { MOCK_WALLPAPERS } from '@/lib/mockData';
 import styles from './wallpaper.module.css';
 
-export default function WallpaperDetailPage({ params }: { params: { id: string } }) {
-  const wallpaper = MOCK_WALLPAPERS.find(w => w.id === params.id) ?? MOCK_WALLPAPERS[0];
+export default async function WallpaperDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const wallpaper = MOCK_WALLPAPERS.find(w => w.id === id) ?? MOCK_WALLPAPERS[0];
   const related = MOCK_WALLPAPERS.filter(w => w.id !== wallpaper.id && w.category === wallpaper.category).slice(0, 4);
 
   const [liked, setLiked] = useState(false);

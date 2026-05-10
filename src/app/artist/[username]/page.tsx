@@ -1,19 +1,18 @@
-'use client';
-
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar/Navbar';
 import WallpaperCard from '@/components/WallpaperCard/WallpaperCard';
 import { MOCK_WALLPAPERS } from '@/lib/mockData';
 import styles from './artist.module.css';
-import { useState } from 'react';
+import Link from 'next/link';
 
-export default function ArtistPage({ params }: { params: { username: string } }) {
-  const artistWallpapers = MOCK_WALLPAPERS.filter(w => w.artist.username === params.username);
+export default async function ArtistPage({ params }: { params: Promise<{ username: string }> }) {
+  const { username } = await params;
+  const artistWallpapers = MOCK_WALLPAPERS.filter(w => w.artist.username === username);
   const artist = artistWallpapers[0]?.artist ?? {
-    name: params.username,
-    username: params.username,
-    avatar: `https://picsum.photos/seed/${params.username}/200/200`,
+    name: username,
+    username: username,
+    avatar: `https://picsum.photos/seed/${username}/200/200`,
     verified: false,
   };
   const [following, setFollowing] = useState(false);
