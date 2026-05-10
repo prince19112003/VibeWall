@@ -1,0 +1,313 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: radial-gradient(circle at center, #1a1510 0%, #080808 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.flameAura {
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
+  filter: blur(60px);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.certificate {
+  position: relative;
+  width: 100%;
+  max-width: 840px;
+  aspect-ratio: 1.414 / 1;
+  background: #0a0a0a;
+  border-radius: 4px; /* Classic sharp corners */
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 50px 100px rgba(0,0,0,0.9), 0 0 100px rgba(245, 158, 11, 0.1);
+  z-index: 2;
+}
+
+.fireContainer {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 200px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.spark {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 4px; height: 4px;
+  background: var(--accent-gold);
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+.goldFoilBorder {
+  position: absolute;
+  inset: 0;
+  border: 12px solid transparent;
+  border-image: linear-gradient(135deg, #f59e0b, #78350f, #fbbf24, #d97706) 1;
+  z-index: 1;
+}
+
+.innerBorder {
+  position: absolute;
+  inset: 24px;
+  border: 2px solid rgba(245, 158, 11, 0.4);
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.header {
+  margin-bottom: 40px;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoIcon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--accent-gold), #b45309);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+}
+
+.logoText {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.official {
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: var(--accent-gold);
+  display: block;
+  margin-top: 4px;
+}
+
+.mainBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.dividerLine {
+  width: 100px;
+  height: 2px;
+  background: var(--accent-gold);
+  margin-bottom: 24px;
+}
+
+.subTitle {
+  font-size: 0.9rem;
+  letter-spacing: 0.4em;
+  color: var(--accent-gold);
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.presentedTo {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #888;
+  margin-bottom: 16px;
+  letter-spacing: 0.2em;
+}
+
+.artistName {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 4rem;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+.statement {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+.highlight {
+  color: var(--accent-gold);
+  font-weight: 800;
+}
+
+.wpTitle {
+  font-style: italic;
+  color: #fff;
+  opacity: 0.8;
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 40px;
+}
+
+.signGroup {
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signature {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.id {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.signLine {
+  width: 100%;
+  height: 1px;
+  background: rgba(245, 158, 11, 0.3);
+  margin-bottom: 8px;
+}
+
+.signLabel {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.seal {
+  width: 100px;
+  height: 100px;
+  border: 2px dashed var(--accent-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  animation: spin 20s linear infinite;
+}
+
+.sealInner {
+  width: 100%;
+  height: 100%;
+  background: rgba(245, 158, 11, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.sealYear {
+  font-weight: 900;
+  color: var(--accent-gold);
+  font-size: 0.9rem;
+}
+
+.sealText {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  font-size: 0.4rem;
+  font-weight: 900;
+  color: var(--accent-gold);
+  letter-spacing: 0.5em;
+  /* Simulating circular text with a placeholder */
+  display: none; 
+}
+
+.date {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.2em;
+}
+
+.shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  transform: skewX(-20deg);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.actions {
+  margin-top: 40px;
+  display: flex;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .certificate {
+    aspect-ratio: auto;
+    padding: 24px;
+  }
+  .content { padding: 24px; }
+  .artistName { font-size: 2.2rem; }
+  .footer { flex-direction: column; align-items: center; gap: 32px; }
+  .signGroup { width: 100%; }
+}
+
+@media print {
+  .container { background: white !important; padding: 0; }
+  .actions { display: none; }
+  .certificate { box-shadow: none !important; border: 1px solid #ccc; }
+}
