@@ -41,13 +41,17 @@
 .logoIcon {
   width: 34px;
   height: 34px;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-pink));
+  background: transparent; /* Changed from gradient to transparent */
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   flex-shrink: 0;
+}
+
+.logoIcon img {
+  mix-blend-mode: screen; /* Makes black background of new logo invisible */
 }
 
 .logoText {
