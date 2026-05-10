@@ -11,6 +11,11 @@ export const metadata: Metadata = {
     description: "Discover, download and share stunning 4K & 8K wallpapers.",
     type: "website",
   },
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/icon.png',
+    apple: '/icon.png',
+  },
 };
 
 export default function RootLayout({
