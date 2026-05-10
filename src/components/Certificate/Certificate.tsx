@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import styles from './Certificate.module.css';
 
 interface CertificateProps {
