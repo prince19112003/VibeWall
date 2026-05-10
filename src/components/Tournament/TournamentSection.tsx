@@ -146,9 +146,9 @@ export default function TournamentSection() {
 
           {/* CTA */}
           <div className={styles.cta}>
-            <button className="btn-primary" id="enter-tournament">
-              🚀 Upload & Enter Contest
-            </button>
+            <a href="/upload" className="btn-primary" id="enter-tournament">
+              🚀 Upload &amp; Enter Contest
+            </a>
           </div>
         </div>
       </div>

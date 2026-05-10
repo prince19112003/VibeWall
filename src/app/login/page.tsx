@@ -23,7 +23,7 @@ export default function LoginPage() {
       {/* Logo */}
       <Link href="/" className={styles.logo}>
         <div className={styles.logoIcon}>
-          <Image src="/icon.png" alt="Logo" width={28} height={28} />
+          <Image src="/brand-icon.png" alt="Logo" width={28} height={28} />
         </div>
         <span className={styles.logoText}>Vibe<span className="gradient-text">Walls</span></span>
       </Link>

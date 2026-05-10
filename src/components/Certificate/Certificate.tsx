@@ -32,7 +32,7 @@ export default function Certificate({
       >
         {/* Flame Particles */}
         <div className={styles.fireContainer}>
-          {[...Array(6)].map((_, i) => (
+          {[0, 1, 2, 3, 4, 5].map((i) => (
             <motion.div 
               key={i}
               className={styles.spark}
@@ -43,7 +43,7 @@ export default function Certificate({
                 scale: [0, 1, 0]
               }}
               transition={{ 
-                duration: 2 + Math.random() * 2, 
+                duration: 2 + (i * 0.3), 
                 repeat: Infinity, 
                 delay: i * 0.4 
               }}
@@ -60,7 +60,7 @@ export default function Certificate({
           <div className={styles.header}>
             <div className={styles.logo}>
               <div className={styles.logoIcon}>
-                <Image src="/icon.png" alt="Logo" width={40} height={40} style={{ borderRadius: '8px' }} />
+                <Image src="/brand-icon.png" alt="Logo" width={40} height={40} style={{ borderRadius: '8px' }} />
               </div>
               <span className={styles.logoText}>VibeWalls <span className={styles.official}>OFFICIAL</span></span>
             </div>

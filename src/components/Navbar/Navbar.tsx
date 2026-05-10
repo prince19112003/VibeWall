@@ -41,7 +41,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className={styles.logo}>
             <div className={styles.logoIcon}>
-              <Image src="/icon.png" alt="Logo" width={32} height={32} style={{ borderRadius: '8px' }} />
+              <Image src="/brand-icon.png" alt="Logo" width={32} height={32} style={{ borderRadius: '8px' }} />
             </div>
             <span className={styles.logoText}>Vibe<span className="gradient-text">Walls</span></span>
           </Link>

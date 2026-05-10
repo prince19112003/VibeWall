@@ -7,18 +7,10 @@ import styles from './Preloader.module.css';
 
 export default function Preloader() {
   const [loading, setLoading] = useState(true);
-  const [particles, setParticles] = useState<any[]>([]);
 
   useEffect(() => {
-    // Generate particles only on client to avoid hydration mismatch
-    const newParticles = [...Array(15)].map(() => ({
-      delay: `${Math.random() * 2}s`,
-      x: `${Math.random() * 100}%`,
-      y: `${Math.random() * 100}%`
-    }));
-    setParticles(newParticles);
-
-    const timer = setTimeout(() => setLoading(false), 3000);
+    // 5 seconds to allow the full 'Legendary' animation to play out
+    const timer = setTimeout(() => setLoading(false), 5000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -31,64 +23,60 @@ export default function Preloader() {
           exit={{ 
             opacity: 0,
             filter: 'brightness(2) blur(20px)',
-            transition: { duration: 0.8, ease: "easeInOut" } 
+            transition: { duration: 1, ease: "easeInOut" } 
           }}
         >
-          {/* Energy Portal Background */}
-          <div className={styles.portal} />
-          <div className={styles.scanline} />
-          
-          <div className={styles.content}>
-            {/* The Materializing Logo */}
-            <motion.div 
-              className={styles.logoContainer}
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              transition={{ delay: 0.5, duration: 1, ease: [0.33, 1, 0.68, 1] }}
-            >
-              <motion.div 
-                className={styles.logoFrame}
-                animate={{ 
-                  boxShadow: [
-                    "0 0 20px rgba(245, 158, 11, 0.2)",
-                    "0 0 60px rgba(245, 158, 11, 0.5)",
-                    "0 0 20px rgba(245, 158, 11, 0.2)"
-                  ]
-                }}
-                transition={{ repeat: Infinity, duration: 2 }}
-              >
-                <Image 
-                  src="/icon.png" 
-                  alt="VibeWalls" 
-                  width={150} 
-                  height={150} 
-                  priority
-                  className={styles.mainImg}
-                />
-              </motion.div>
-            </motion.div>
-
-            {/* Unique Energy Bar */}
-            <div className={styles.energyBarWrap}>
-              <motion.div 
-                className={styles.energyLevel}
-                initial={{ width: '0%' }}
-                animate={{ width: '100%' }}
-                transition={{ duration: 2.5, ease: "easeInOut" }}
-              />
-              <div className={styles.energyGlow} />
-            </div>
+          {/* 1. Gooey Liquid Blobs */}
+          <div className={styles.liquidWrapper}>
+            <div className={`${styles.blob} ${styles.purpleBlob}`} />
+            <div className={`${styles.blob} ${styles.goldBlob}`} />
           </div>
 
-          {/* Sucking Particles Effect */}
-          <div className={styles.vortex}>
-            {particles.map((p, i) => (
-              <div key={i} className={styles.particle} style={{
-                '--delay': p.delay,
-                '--x': p.x,
-                '--y': p.y
-              } as any} />
-            ))}
+          {/* 2. Legendary Shockwave */}
+          <div className={styles.shockwave} />
+
+          {/* 3. Reveal Flash */}
+          <div className={styles.revealFlash} />
+
+          {/* SVG Filter for the "Gooey" effect */}
+          <svg style={{ display: 'none' }}>
+            <defs>
+              <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="20" result="blur" />
+                <feColorMatrix 
+                  in="blur" 
+                  mode="matrix" 
+                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 30 -15" 
+                  result="goo" 
+                />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+              </filter>
+            </defs>
+          </svg>
+          
+          <div className={styles.content}>
+            {/* 4. Glass Shield for Logo */}
+            <div className={styles.logoFrame}>
+              <div className={styles.logoAura} />
+              <Image 
+                src="/brand-icon.png" 
+                alt="VibeWalls" 
+                width={160} 
+                height={160} 
+                priority
+                className={styles.mainImg}
+              />
+            </div>
+
+            {/* 5. Animated Energy Bar */}
+            <div className={styles.progressBar}>
+              <motion.div 
+                className={styles.progressFill}
+                initial={{ width: '0%' }}
+                animate={{ width: '100%' }}
+                transition={{ duration: 4.5, ease: "easeInOut" }}
+              />
+            </div>
           </div>
         </motion.div>
       )}

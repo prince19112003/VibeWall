@@ -292,7 +292,7 @@ export default function HomePage() {
               </nav>
             </div>
             <div className={styles['glow-line']} aria-hidden="true" />
-            <p className={styles.copyright}>© 2025 VibeWalls. Made with ♥ for the creative community.</p>
+            <p className={styles.copyright}>© 2026 VibeWalls. Made with ♥ for the creative community.</p>
           </div>
         </footer>
       </main>
