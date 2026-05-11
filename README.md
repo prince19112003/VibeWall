@@ -88,5 +88,5 @@ Contributions are what make the open source community such an amazing place to l
 ---
 
 <p align="center">
-  Built with ❤️ by <b>Prince</b> & <b>VibeWalls Team</b>
+  Built with ❤️ by <b>Prince</b> & <b>Saksham</b>
 </p>
