@@ -125,3 +125,17 @@ export async function updateProfile(userId: string, updates: Partial<Profile>) {
   if (error) throw error;
   return { success: true };
 }
+
+// Fetch all artists
+export async function getArtists() {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .order('is_verified', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching artists:', error);
+    return [];
+  }
+  return data as Profile[];
+}
