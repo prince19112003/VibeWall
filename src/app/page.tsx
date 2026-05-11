@@ -8,16 +8,8 @@ import Navbar from '@/components/Navbar/Navbar';
 import WallpaperCard from '@/components/WallpaperCard/WallpaperCard';
 import TournamentSection from '@/components/Tournament/TournamentSection';
 import LivePreview from '@/components/LivePreview/LivePreview';
-import { CATEGORIES } from '@/lib/mockData';
-import { getWallpapers, type Wallpaper } from '@/lib/api';
+import { getWallpapers, CATEGORIES, type Wallpaper } from '@/lib/api';
 import styles from './page.module.css';
-
-// Feature 4: Pick "Wallpaper of the Day" — deterministic using today's date
-function getDailyWallpaper() {
-  const today = new Date();
-  const dayIndex = (today.getFullYear() * 365 + today.getMonth() * 30 + today.getDate()) % MOCK_WALLPAPERS.length;
-  return MOCK_WALLPAPERS[dayIndex];
-}
 
 export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState('all');

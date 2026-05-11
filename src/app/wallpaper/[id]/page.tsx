@@ -1,18 +1,18 @@
 'use client';
 
-import { useState, use } from 'react';
+import { useState, useEffect, use } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar/Navbar';
-import { MOCK_WALLPAPERS } from '@/lib/mockData';
+import { getWallpaperById, getWallpapers, type Wallpaper } from '@/lib/api';
 import styles from './wallpaper.module.css';
 
 export default function WallpaperDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = use(params);
-  const id = resolvedParams.id;
-  const wallpaper = MOCK_WALLPAPERS.find(w => w.id === id) ?? MOCK_WALLPAPERS[0];
-  const related = MOCK_WALLPAPERS.filter(w => w.id !== wallpaper.id && w.category === wallpaper.category).slice(0, 4);
+  const { id } = use(params);
+  const [wallpaper, setWallpaper] = useState<Wallpaper | null>(null);
+  const [related, setRelated] = useState<Wallpaper[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -30,6 +30,24 @@ export default function WallpaperDetailPage({ params }: { params: Promise<{ id: 
 
   const imgFilter = `brightness(${brightness}%) saturate(${saturation}%) blur(${blur}px)`;
 
+  useEffect(() => {
+    async function loadData() {
+      setLoading(true);
+      const wall = await getWallpaperById(id);
+      if (wall) {
+        setWallpaper(wall);
+        const all = await getWallpapers();
+        const similar = all.filter(w => w.id !== wall.id && w.category === wall.category).slice(0, 4);
+        setRelated(similar);
+      }
+      setLoading(false);
+    }
+    loadData();
+  }, [id]);
+
+  if (loading) return <div className="loader-container"><div className="loader"></div></div>;
+  if (!wallpaper) return <div>Wallpaper not found</div>;
+
   const resolutions = [
     { label: 'Original', sublabel: `${wallpaper.resolution} · Full Quality`, free: false, icon: '⭐' },
     { label: 'Desktop HD', sublabel: '1920 × 1080', free: true, icon: '🖥️' },
@@ -44,7 +62,7 @@ export default function WallpaperDetailPage({ params }: { params: Promise<{ id: 
         {/* ── Hero Image ── */}
         <section className={styles.hero}>
           <div className={styles.heroBg}>
-            <Image src={wallpaper.imageUrl} alt="" fill className={styles.heroBgImg} aria-hidden="true" />
+            <Image src={wallpaper.original_url} alt="" fill className={styles.heroBgImg} aria-hidden="true" />
             <div className={styles.heroBgOverlay} />
           </div>
           <motion.div
@@ -54,10 +72,10 @@ export default function WallpaperDetailPage({ params }: { params: Promise<{ id: 
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
             <Image
-              src={wallpaper.imageUrl}
+              src={wallpaper.original_url}
               alt={wallpaper.title}
-              width={wallpaper.width * 100}
-              height={wallpaper.height * 100}
+              width={1920}
+              height={1080}
               className={styles.mainImage}
               style={{ filter: imgFilter }}
               onLoad={() => setImgLoaded(true)}
@@ -76,7 +94,7 @@ export default function WallpaperDetailPage({ params }: { params: Promise<{ id: 
           >
             <div className={styles.info}>
               <div className={styles.tags}>
-                {wallpaper.isPremium && <span className="badge badge-gold">⭐ Premium</span>}
+                {wallpaper.is_premium && <span className="badge badge-gold">⭐ Premium</span>}
                 <span className="badge badge-purple">{wallpaper.resolution}</span>
                 <span className="badge badge-pink">{wallpaper.category}</span>
               </div>
@@ -84,23 +102,16 @@ export default function WallpaperDetailPage({ params }: { params: Promise<{ id: 
               <h1 className={styles.title}>{wallpaper.title}</h1>
 
               {/* Artist */}
-              <Link href={`/artist/${wallpaper.artist.username}`} className={styles.artistCard}>
+              <div className={styles.artistCard}>
                 <div className={styles.artistAvatar}>
-                  <Image src={wallpaper.artist.avatar} alt={wallpaper.artist.name} width={44} height={44} className={styles.avatarImg} />
+                  <img src={wallpaper.artist?.avatar_url || '/default-avatar.png'} alt={wallpaper.artist?.full_name || 'Artist'} className={styles.avatarImg} />
                 </div>
                 <div>
-                  <p className={styles.artistName}>
-                    {wallpaper.artist.name}
-                    {wallpaper.artist.verified && (
-                      <svg className={styles.verifiedIcon} width="14" height="14" viewBox="0 0 24 24" fill="#06b6d4">
-                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                      </svg>
-                    )}
-                  </p>
-                  <p className={styles.artistSub}>@{wallpaper.artist.username}</p>
+                  <h3 className={styles.artistName}>{wallpaper.artist?.full_name || wallpaper.artist?.username}</h3>
+                  <p className={styles.artistHandle}>@{wallpaper.artist?.username}</p>
                 </div>
                 <button className={`btn-ghost ${styles.followBtn}`} onClick={e => e.preventDefault()}>Follow</button>
-              </Link>
+              </div>
 
               {/* Stats */}
               <div className={styles.stats}>
@@ -120,8 +131,9 @@ export default function WallpaperDetailPage({ params }: { params: Promise<{ id: 
 
               {/* Tags */}
               <div className={styles.tagList}>
-                {wallpaper.tags.map(tag => (
-                  <span key={tag} className={styles.tag}>#{tag}</span>
+                <span className={styles.tag}>#{wallpaper.category.toLowerCase()}</span>
+                {wallpaper.description?.split(' ').filter(t => t.startsWith('#')).map(tag => (
+                  <span key={tag} className={styles.tag}>{tag}</span>
                 ))}
               </div>
 
@@ -167,7 +179,7 @@ export default function WallpaperDetailPage({ params }: { params: Promise<{ id: 
                           </div>
                         )}
                         <Image
-                          src={wallpaper.imageUrl}
+                          src={wallpaper.preview_url || wallpaper.original_url}
                           alt={wallpaper.title}
                           fill
                           className={styles.mockupImg}
@@ -283,7 +295,7 @@ export default function WallpaperDetailPage({ params }: { params: Promise<{ id: 
                   <motion.div key={w.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }} transition={{ delay: i * 0.08 }}>
                     <Link href={`/wallpaper/${w.id}`} className={styles.relatedCard}>
-                      <Image src={w.imageUrl} alt={w.title} width={400} height={250} className={styles.relatedImg} />
+                      <Image src={w.preview_url || w.original_url} alt={w.title} width={400} height={250} className={styles.relatedImg} />
                       <div className={styles.relatedOverlay}>
                         <span className={styles.relatedCardTitle}>{w.title}</span>
                       </div>

@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar/Navbar';
 import WallpaperCard from '@/components/WallpaperCard/WallpaperCard';
-import { MOCK_WALLPAPERS, CATEGORIES } from '@/lib/mockData';
+import { getWallpapers, CATEGORIES, type Wallpaper } from '@/lib/api';
 import styles from './explore.module.css';
 
 const SORT_OPTIONS = ['Trending', 'Newest', 'Most Downloaded', 'Most Liked'] as const;
@@ -26,22 +26,41 @@ export default function ExplorePage() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [sortBy, setSortBy] = useState<typeof SORT_OPTIONS[number]>('Trending');
   const [activeColor, setActiveColor] = useState<string | null>(null);
+  const [wallpapers, setWallpapers] = useState<Wallpaper[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      setLoading(true);
+      const data = await getWallpapers();
+      setWallpapers(data);
+      setLoading(false);
+    }
+    loadData();
+  }, []);
 
   const filtered = useMemo(() => {
-    let list = MOCK_WALLPAPERS.filter(w => {
-      const matchCat = activeCategory === 'all' || w.category === activeCategory;
-      const matchQ = !query || w.title.toLowerCase().includes(query.toLowerCase()) || w.tags.some(t => t.includes(query.toLowerCase()));
+    let list = wallpapers.filter(w => {
+      const matchCat = activeCategory === 'all' || w.category?.toLowerCase() === activeCategory.toLowerCase();
+      
+      const titleMatch = w.title.toLowerCase().includes(query.toLowerCase());
+      const tagsMatch = w.description?.toLowerCase().includes(query.toLowerCase()) || 
+                       (w.category && w.category.toLowerCase().includes(query.toLowerCase()));
+      
+      const matchQ = !query || titleMatch || tagsMatch;
+      
       const matchColor = !activeColor
         ? true
-        : w.tags.some(t => COLOR_FILTERS.find(c => c.value === activeColor)?.tags.includes(t));
+        : (w.description || '').toLowerCase().includes(activeColor.toLowerCase());
+        
       return matchCat && matchQ && matchColor;
     });
 
-    if (sortBy === 'Most Downloaded') list = [...list].sort((a, b) => b.downloads - a.downloads);
-    if (sortBy === 'Most Liked') list = [...list].sort((a, b) => b.likes - a.likes);
-    if (sortBy === 'Newest') list = [...list].reverse();
+    if (sortBy === 'Most Downloaded') list = [...list].sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+    if (sortBy === 'Most Liked') list = [...list].sort((a, b) => (b.likes || 0) - (a.likes || 0));
+    if (sortBy === 'Newest') list = [...list].sort((a, b) => new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime());
     return list;
-  }, [query, activeCategory, sortBy, activeColor]);
+  }, [query, activeCategory, sortBy, activeColor, wallpapers]);
 
   return (
     <>

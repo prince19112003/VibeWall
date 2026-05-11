@@ -20,6 +20,18 @@ export interface Wallpaper {
   artist?: Profile;
 }
 
+export const CATEGORIES = [
+  { id: 'all', label: 'All', icon: '✦' },
+  { id: 'abstract', label: 'Abstract', icon: '◈' },
+  { id: 'nature', label: 'Nature', icon: '❋' },
+  { id: 'cyberpunk', label: 'Cyberpunk', icon: '⬡' },
+  { id: 'minimalist', label: 'Minimalist', icon: '◻' },
+  { id: 'anime', label: 'Anime', icon: '⬟' },
+  { id: 'ai-art', label: 'AI Art', icon: '◈' },
+  { id: 'space', label: 'Space', icon: '✧' },
+  { id: 'architecture', label: 'Architecture', icon: '⬛' },
+];
+
 export interface Profile {
   id: string;
   username: string;
@@ -124,6 +136,21 @@ export async function updateProfile(userId: string, updates: Partial<Profile>) {
 
   if (error) throw error;
   return { success: true };
+}
+
+// Fetch a single wallpaper by ID
+export async function getWallpaperById(id: string) {
+  const { data, error } = await supabase
+    .from('wallpapers')
+    .select('*, artist:profiles(*)')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    console.error('Error fetching wallpaper:', error);
+    return null;
+  }
+  return data as Wallpaper;
 }
 
 // Fetch all artists

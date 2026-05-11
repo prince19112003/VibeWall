@@ -3,40 +3,21 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { getWallpapers, type Wallpaper } from '@/lib/api';
 import styles from './Tournament.module.css';
-
-const TOP_CONTENDERS = [
-  {
-    id: '5',
-    title: 'Deep Space Nebula',
-    imageUrl: 'https://picsum.photos/seed/space5/600/400',
-    artist: 'Cosmos Lab',
-    downloads: 1240,
-    rank: 1,
-  },
-  {
-    id: '8',
-    title: 'Neural Network Pulse',
-    imageUrl: 'https://picsum.photos/seed/neural8/600/400',
-    artist: 'AI Studio X',
-    downloads: 980,
-    rank: 2,
-  },
-  {
-    id: '1',
-    title: 'Neon Cityscape',
-    imageUrl: 'https://picsum.photos/seed/neon1/600/400',
-    artist: 'Alex Rivera',
-    downloads: 850,
-    rank: 3,
-  }
-];
 
 export default function TournamentSection() {
   const [timeLeft, setTimeLeft] = useState({ days: 3, hours: 14, mins: 42, secs: 10 });
+  const [topWallpapers, setTopWallpapers] = useState<Wallpaper[]>([]);
 
-  // Simple countdown timer effect
   useEffect(() => {
+    async function loadTopArt() {
+      const all = await getWallpapers();
+      const top3 = [...all].sort((a, b) => (b.downloads || 0) - (a.downloads || 0)).slice(0, 3);
+      setTopWallpapers(top3);
+    }
+    loadTopArt();
+
     const timer = setInterval(() => {
       setTimeLeft(prev => {
         if (prev.secs > 0) return { ...prev, secs: prev.secs - 1 };
@@ -113,7 +94,7 @@ export default function TournamentSection() {
 
           {/* Leaderboard Grid */}
           <div className={styles.leaderboard}>
-            {TOP_CONTENDERS.map((item, index) => (
+            {topWallpapers.map((item, index) => (
               <motion.div 
                 key={item.id}
                 className={styles.contenderCard}
@@ -122,22 +103,22 @@ export default function TournamentSection() {
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <div className={styles.rankBadge} data-rank={item.rank}>
-                  {item.rank === 1 ? '🥇' : item.rank === 2 ? '🥈' : '🥉'}
+                <div className={styles.rankBadge} data-rank={index + 1}>
+                  {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}
                 </div>
                 <div className={styles.imgWrap}>
-                  <Image src={item.imageUrl} alt={item.title} fill className={styles.img} />
+                  <Image src={item.preview_url || item.original_url} alt={item.title} fill className={styles.img} />
                 </div>
                 <div className={styles.cardInfo}>
                   <h3 className={styles.cardTitle}>{item.title}</h3>
-                  <p className={styles.cardArtist}>by {item.artist}</p>
+                  <p className={styles.cardArtist}>by {item.artist?.full_name || item.artist?.username}</p>
                   <div className={styles.cardStats}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                       <polyline points="7,10 12,15 17,10"/>
                       <line x1="12" y1="15" x2="12" y2="3"/>
                     </svg>
-                    <span>{item.downloads.toLocaleString()} downloads</span>
+                    <span>{(item.downloads || 0).toLocaleString()} downloads</span>
                   </div>
                 </div>
               </motion.div>

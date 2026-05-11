@@ -35,6 +35,7 @@ export default function ProfilePage() {
       async function loadUserData() {
         setLoading(true);
         // We get initial profile from user metadata or fetch it
+        if (!user) return;
         const { data: profileData } = await (await import('@/lib/supabase')).supabase
           .from('profiles')
           .select('*')

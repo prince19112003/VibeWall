@@ -64,7 +64,7 @@ export default function WallpaperCard({ wallpaper, index = 0, onPreview }: Wallp
         </div>
 
         {/* Premium Badge */}
-        {wallpaper.isPremium && (
+        {wallpaper.is_premium && (
           <div className={styles.premiumBadge} aria-label="Premium wallpaper">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 1L9 9H1l6.5 5.5L5 22l7-5 7 5-2.5-7.5L23 9h-8L12 1z"/>
