@@ -9,7 +9,7 @@ export default function Preloader() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 4500);
+    const timer = setTimeout(() => setLoading(false), 3000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -72,9 +72,22 @@ export default function Preloader() {
                 className={styles.progressFill}
                 initial={{ scaleX: 0, originX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ duration: 4, ease: "easeInOut" }}
+                transition={{ duration: 2.5, ease: "easeInOut" }}
               />
             </div>
+
+            {/* 6. Skip Button */}
+            <motion.button
+              className={styles.skipBtn}
+              onClick={() => setLoading(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.5, duration: 0.5 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Skip Intro
+            </motion.button>
           </div>
         </motion.div>
       )}

@@ -1,13 +1,15 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar/Navbar';
 import WallpaperCard from '@/components/WallpaperCard/WallpaperCard';
 import TournamentSection from '@/components/Tournament/TournamentSection';
-import { MOCK_WALLPAPERS, CATEGORIES } from '@/lib/mockData';
+import LivePreview from '@/components/LivePreview/LivePreview';
+import { CATEGORIES } from '@/lib/mockData';
+import { getWallpapers, type Wallpaper } from '@/lib/api';
 import styles from './page.module.css';
 
 // Feature 4: Pick "Wallpaper of the Day" — deterministic using today's date
@@ -17,21 +19,40 @@ function getDailyWallpaper() {
   return MOCK_WALLPAPERS[dayIndex];
 }
 
-const dailyWall = getDailyWallpaper();
-
 export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [sortBy, setSortBy] = useState<'trending' | 'newest' | 'downloads'>('trending');
+  const [wallpapers, setWallpapers] = useState<Wallpaper[]>([]);
+  const [dailyWall, setDailyWall] = useState<Wallpaper | null>(null);
+  const [previewWall, setPreviewWall] = useState<Wallpaper | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      setLoading(true);
+      const data = await getWallpapers();
+      setWallpapers(data);
+      
+      if (data.length > 0) {
+        // Deterministic Daily Vibe from real data
+        const today = new Date();
+        const index = (today.getFullYear() * 365 + today.getMonth() * 30 + today.getDate()) % data.length;
+        setDailyWall(data[index]);
+      }
+      setLoading(false);
+    }
+    loadData();
+  }, []);
 
   const filtered = useMemo(() => {
     let list = activeCategory === 'all'
-      ? MOCK_WALLPAPERS
-      : MOCK_WALLPAPERS.filter(w => w.category === activeCategory);
+      ? wallpapers
+      : wallpapers.filter(w => w.category === activeCategory);
 
-    if (sortBy === 'downloads') list = [...list].sort((a, b) => b.downloads - a.downloads);
-    if (sortBy === 'newest') list = [...list].reverse();
+    if (sortBy === 'downloads') list = [...list].sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+    if (sortBy === 'trending') list = [...list].sort((a, b) => (b.likes || 0) - (a.likes || 0));
     return list;
-  }, [activeCategory, sortBy]);
+  }, [activeCategory, sortBy, wallpapers]);
 
   return (
     <>
@@ -111,40 +132,60 @@ export default function HomePage() {
         {/* ============ FEATURE 4: DAILY VIBE ============ */}
         <section className={styles.dailySection} aria-label="Wallpaper of the day">
           <div className="container">
-            <motion.div
-              className={styles.dailyCard}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.7 }}
-            >
-              {/* Background image */}
-              <div className={styles.dailyBg}>
-                <Image src={dailyWall.imageUrl} alt="" fill className={styles.dailyBgImg} aria-hidden="true" />
-                <div className={styles.dailyOverlay} />
-              </div>
+            {dailyWall && (
+              <motion.div
+                className={styles.dailyCard}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.7 }}
+              >
+                {/* Background image */}
+                <div className={styles.dailyBg}>
+                  <Image 
+                    src={dailyWall.preview_url || dailyWall.original_url} 
+                    alt="" 
+                    fill 
+                    className={styles.dailyBgImg} 
+                    aria-hidden="true" 
+                    sizes="100vw"
+                    priority
+                  />
+                  <div className={styles.dailyOverlay} />
+                </div>
 
-              <div className={styles.dailyContent}>
-                <div className={styles.dailyBadge}>
-                  <span className={styles.dailyDot} />
-                  ✦ Vibe of the Day
+                <div className={styles.dailyContent}>
+                  <div className={styles.dailyBadge}>
+                    <span className={styles.dailyDot} />
+                    ✦ Vibe of the Day
+                  </div>
+                  <h2 className={styles.dailyTitle}>{dailyWall.title}</h2>
+                  <p className={styles.dailyArtist}>by {dailyWall.artist?.username || 'VibeWalls Artist'}</p>
+                  <div className={styles.dailyStats}>
+                    <span>⬇ {dailyWall.downloads.toLocaleString()}</span>
+                    <span>♥ {dailyWall.likes.toLocaleString()}</span>
+                    <span>📐 {dailyWall.resolution}</span>
+                  </div>
+                  <div className={styles.dailyActions}>
+                    <Link href={`/wallpaper/${dailyWall.id}`} className="btn-primary" id="daily-view">
+                      View &amp; Download
+                    </Link>
+                    <button className="btn-ghost" onClick={() => setPreviewWall(dailyWall)}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+                      </svg>
+                      Live Preview
+                    </button>
+                  </div>
                 </div>
-                <h2 className={styles.dailyTitle}>{dailyWall.title}</h2>
-                <p className={styles.dailyArtist}>by {dailyWall.artist.name}</p>
-                <div className={styles.dailyStats}>
-                  <span>⬇ {dailyWall.downloads.toLocaleString()}</span>
-                  <span>♥ {dailyWall.likes.toLocaleString()}</span>
-                  <span>📐 {dailyWall.resolution}</span>
-                </div>
-                <Link href={`/wallpaper/${dailyWall.id}`} className="btn-primary" id="daily-view" style={{ alignSelf: 'flex-start', marginTop: 8 }}>
-                  View &amp; Download
-                </Link>
-              </div>
-            </motion.div>
+              </motion.div>
+            )}
           </div>
         </section>
 
-        <TournamentSection />
+        <div id="tournament">
+          <TournamentSection />
+        </div>
 
         {/* ============ GALLERY SECTION ============ */}
         <section className={styles.gallerySection} id="gallery" aria-label="Wallpaper gallery">
@@ -192,7 +233,12 @@ export default function HomePage() {
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }} role="feed" aria-label="Wallpaper grid">
                 {filtered.map((wallpaper, index) => (
-                  <WallpaperCard key={wallpaper.id} wallpaper={wallpaper} index={index} />
+                  <WallpaperCard 
+                    key={wallpaper.id} 
+                    wallpaper={wallpaper} 
+                    index={index} 
+                    onPreview={setPreviewWall}
+                  />
                 ))}
               </motion.div>
             </AnimatePresence>
@@ -278,6 +324,15 @@ export default function HomePage() {
             <p className={styles.copyright}>© 2026 VibeWalls. Made with ♥ for the creative community.</p>
           </div>
         </footer>
+        {/* Live Preview Modal */}
+        {previewWall && (
+          <LivePreview 
+            isOpen={!!previewWall} 
+            onClose={() => setPreviewWall(null)} 
+            imageUrl={previewWall.preview_url || previewWall.original_url} 
+            title={previewWall.title} 
+          />
+        )}
       </main>
     </>
   );

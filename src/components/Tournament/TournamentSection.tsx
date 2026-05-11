@@ -49,7 +49,7 @@ export default function TournamentSection() {
   }, []);
 
   return (
-    <section className={styles.tournament}>
+    <section className={styles.tournament} id="tournament">
       <div className="container">
         <div className={styles.wrapper}>
           {/* Header */}

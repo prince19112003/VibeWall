@@ -4,31 +4,13 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { type Wallpaper } from '@/lib/api';
 import styles from './WallpaperCard.module.css';
-
-export interface Wallpaper {
-  id: string;
-  title: string;
-  imageUrl: string;
-  width: number;
-  height: number;
-  artist: {
-    name: string;
-    username: string;
-    avatar: string;
-    verified: boolean;
-  };
-  tags: string[];
-  downloads: number;
-  likes: number;
-  resolution: string;
-  category: string;
-  isPremium?: boolean;
-}
 
 interface WallpaperCardProps {
   wallpaper: Wallpaper;
   index?: number;
+  onPreview?: (wallpaper: Wallpaper) => void;
 }
 
 function formatNumber(n: number): string {
@@ -37,7 +19,7 @@ function formatNumber(n: number): string {
   return n.toString();
 }
 
-export default function WallpaperCard({ wallpaper, index = 0 }: WallpaperCardProps) {
+export default function WallpaperCard({ wallpaper, index = 0, onPreview }: WallpaperCardProps) {
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -71,7 +53,7 @@ export default function WallpaperCard({ wallpaper, index = 0 }: WallpaperCardPro
           }}
         >
           <Image
-            src={wallpaper.imageUrl}
+            src={wallpaper.preview_url || wallpaper.original_url}
             alt={wallpaper.title}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -112,11 +94,11 @@ export default function WallpaperCard({ wallpaper, index = 0 }: WallpaperCardPro
       {/* Card Footer */}
       <div className={styles.footer}>
         {/* Artist Info */}
-        <Link href={`/artist/${wallpaper.artist.username}`} className={styles.artistInfo}>
+        <Link href={`/artist/${wallpaper.artist?.username || 'vibewalls'}`} className={styles.artistInfo}>
           <div className={styles.avatarWrap}>
             <Image
-              src={wallpaper.artist.avatar}
-              alt={wallpaper.artist.name}
+              src={wallpaper.artist?.avatar_url || '/default-avatar.png'}
+              alt={wallpaper.artist?.username || 'Artist'}
               width={26}
               height={26}
               className={styles.avatar}
@@ -124,8 +106,8 @@ export default function WallpaperCard({ wallpaper, index = 0 }: WallpaperCardPro
           </div>
           <div className={styles.artistMeta}>
             <span className={styles.artistName}>
-              {wallpaper.artist.name}
-              {wallpaper.artist.verified && (
+              {wallpaper.artist?.username || 'VibeWalls Artist'}
+              {wallpaper.artist?.is_verified && (
                 <svg className={styles.verifiedIcon} width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-label="Verified artist">
                   <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
@@ -158,6 +140,19 @@ export default function WallpaperCard({ wallpaper, index = 0 }: WallpaperCardPro
               <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
             </svg>
           </button>
+
+          {onPreview && (
+            <button
+              className={styles.actionBtn}
+              onClick={() => onPreview(wallpaper)}
+              aria-label="Preview on device"
+              title="Preview on device"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+              </svg>
+            </button>
+          )}
         </div>
       </div>
     </motion.article>

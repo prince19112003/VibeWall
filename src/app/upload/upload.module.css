@@ -223,3 +223,19 @@
   .formGrid { grid-template-columns: 1fr; }
   .dropZone { min-height: 280px; }
 }
+
+.errorMsg {
+  color: #ff4d4d;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+  background: rgba(255, 77, 77, 0.1);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 77, 77, 0.2);
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

@@ -489,6 +489,13 @@
   font-weight: 600;
 }
 
+.dailyActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
 @media (max-width: 640px) {
   .dailyContent { padding: 28px 24px; }
   .dailyCard { min-height: 240px; }

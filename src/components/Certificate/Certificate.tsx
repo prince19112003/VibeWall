@@ -1,7 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useRef, useCallback } from 'react';
 import Image from 'next/image';
+import { toPng } from 'html-to-image';
 import styles from './Certificate.module.css';
 
 interface CertificateProps {
@@ -19,12 +21,29 @@ export default function Certificate({
   date = "May 2026",
   winnerId = "VW-2026-084"
 }: CertificateProps) {
+  const certificateRef = useRef<HTMLDivElement>(null);
+
+  const handleDownload = useCallback(async () => {
+    if (certificateRef.current === null) return;
+    
+    try {
+      const dataUrl = await toPng(certificateRef.current, { cacheBust: true, pixelRatio: 2 });
+      const link = document.createElement('a');
+      link.download = `VibeWalls-Certificate-${artistName.replace(/\s+/g, '-')}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('Failed to download certificate', err);
+    }
+  }, [artistName]);
+
   return (
     <div className={styles.container}>
       {/* Background Aura / Flame Effect */}
       <div className={styles.flameAura} />
       
       <motion.div 
+        ref={certificateRef}
         className={styles.certificate}
         initial={{ opacity: 0, scale: 0.9, filter: 'brightness(0) blur(20px)' }}
         animate={{ opacity: 1, scale: 1, filter: 'brightness(1) blur(0px)' }}
@@ -75,8 +94,9 @@ export default function Certificate({
             <p className={styles.statement}>
               For achieving the title of <strong className={styles.highlight}>{rank}</strong> with the stunning wallpaper creation titled 
               <br />
-              <span className={styles.wpTitle}>"{wallpaperTitle}"</span>
+              <span className={styles.wpTitle}>&ldquo;{wallpaperTitle}&rdquo;</span>
             </p>
+            <div className={styles.dateText}>{date}</div>
           </div>
 
           <div className={styles.footer}>
@@ -111,8 +131,8 @@ export default function Certificate({
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
       >
-        <button className="btn-primary" onClick={() => window.print()}>
-          📥 Download PDF / Print
+        <button className="btn-primary" onClick={handleDownload}>
+          📥 Download Certificate (PNG)
         </button>
         <button className="btn-ghost">
           🔥 Share Victory

@@ -16,12 +16,12 @@
 6. Choose region closest to India: **Singapore (ap-southeast-1)**
 7. Click **"Create new project"** — wait ~2 minutes
 
-### 1.2 Get Your API Keys
-1. In your project → go to **Settings → API**
-2. Copy the following and save them:
-   - **Project URL** → this is your `NEXT_PUBLIC_SUPABASE_URL`
-   - **anon public key** → this is your `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - **service_role secret key** → this is your `SUPABASE_SERVICE_ROLE_KEY` (**NEVER expose this to frontend**)
+  ### 1.2 Get Your API Keys
+  1. In your project → go to **Settings → API**
+  2. Copy the following and save them:
+    - **Project URL** → this is your `NEXT_PUBLIC_SUPABASE_URL`
+    - **anon public key** → this is your `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+    - **service_role secret key** → this is your `SUPABASE_SERVICE_ROLE_KEY` (**NEVER expose this to frontend**)
 
 ### 1.3 Create the Database Tables
 Go to **SQL Editor** in Supabase and run each block:

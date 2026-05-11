@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Preloader from '@/components/Preloader/Preloader';
+import { AuthProvider } from '@/context/AuthContext';
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -26,16 +27,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Preloader />
-        <div className="noise-overlay" aria-hidden="true" />
-        <div className="bg-blobs" aria-hidden="true">
-          <div className="bg-blob bg-blob-1" />
-          <div className="bg-blob bg-blob-2" />
-          <div className="bg-blob bg-blob-3" />
-        </div>
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          {children}
-        </div>
+        <AuthProvider>
+          <Preloader />
+          <div className="noise-overlay" aria-hidden="true" />
+          <div className="bg-blobs" aria-hidden="true">
+            <div className="bg-blob bg-blob-1" />
+            <div className="bg-blob bg-blob-2" />
+            <div className="bg-blob bg-blob-3" />
+          </div>
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            {children}
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );

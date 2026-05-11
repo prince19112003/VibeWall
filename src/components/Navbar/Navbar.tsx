@@ -4,12 +4,14 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/context/AuthContext';
+import { signInWithGoogle } from '@/lib/supabase';
 import styles from './Navbar.module.css';
 
 const navLinks = [
   { href: '/', label: 'Discover' },
-  { href: '/explore', label: 'Explore' },
-  { href: '/artists', label: 'Artists' },
+  { href: '/#tournament', label: 'Tournament' },
+  { href: '/artists', label: 'Top Artists' },
   { href: '/feed', label: '👥 Feed' },
 ];
 
@@ -18,6 +20,8 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const { user, signOut, loading } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -51,7 +55,10 @@ export default function Navbar() {
           <ul className={styles.navLinks} role="list">
             {navLinks.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className={styles.navLink}>
+                <Link 
+                  href={link.href} 
+                  className={`${styles.navLink} ${link.label === 'Tournament' ? styles.specialLink : ''}`}
+                >
                   {link.label}
                 </Link>
               </li>
@@ -123,10 +130,34 @@ export default function Navbar() {
               <span>Upload</span>
             </Link>
 
-            {/* Login Button */}
-            <Link href="/login" className="btn-ghost" id="navbar-login">
-              Sign In
+            {/* Mobile Tournament Link (Visible always on mobile) */}
+            <Link href="/#tournament" className={styles.mobileTournamentLink} title="Tournament">
+              🏆
             </Link>
+
+            {/* Auth Button */}
+            {!loading && (
+              user ? (
+                <div className={styles.userProfile}>
+                  <Link href="/profile" className={styles.profileLink}>
+                    <Image 
+                      src={user.user_metadata.avatar_url || '/default-avatar.png'} 
+                      alt="Profile" 
+                      width={32} 
+                      height={32} 
+                      className={styles.avatar} 
+                    />
+                  </Link>
+                  <button onClick={signOut} className="btn-ghost" style={{ padding: '4px 8px', fontSize: '0.7rem' }}>
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <button onClick={signInWithGoogle} className="btn-ghost" id="navbar-login">
+                  Sign In
+                </button>
+              )
+            )}
 
             {/* Mobile Hamburger */}
             <button
@@ -207,9 +238,22 @@ export default function Navbar() {
                   </svg>
                   <span>Upload Wallpaper</span>
                 </Link>
-                <Link href="/login" className="btn-ghost" style={{ justifyContent: 'center', width: '100%' }} onClick={() => setMobileOpen(false)}>
-                  Sign In
-                </Link>
+                {!loading && (
+                  user ? (
+                    <>
+                      <Link href="/profile" className="btn-ghost" style={{ justifyContent: 'center', width: '100%' }} onClick={() => setMobileOpen(false)}>
+                        My Profile
+                      </Link>
+                      <button onClick={signOut} className="btn-ghost" style={{ justifyContent: 'center', width: '100%', color: '#ff4d4d' }}>
+                        Sign Out
+                      </button>
+                    </>
+                  ) : (
+                    <button onClick={signInWithGoogle} className="btn-ghost" style={{ justifyContent: 'center', width: '100%' }}>
+                      Sign In
+                    </button>
+                  )
+                )}
               </div>
             </motion.div>
           </>

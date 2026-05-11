@@ -1,0 +1,143 @@
+.main {
+  padding-top: var(--nav-height);
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.header {
+  padding: 60px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 40px;
+}
+
+.profileRow {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 40px;
+  align-items: center;
+}
+
+.avatar {
+  border-radius: 50%;
+  border: 4px solid var(--border-accent);
+  object-fit: cover;
+  background: var(--bg-secondary);
+}
+
+.name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.username {
+  color: var(--text-accent);
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+
+.bio {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 500px;
+  margin-bottom: 24px;
+}
+
+.stats {
+  display: flex;
+  gap: 40px;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statVal {
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.statLab {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Edit Form */
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+}
+
+.input, .textarea {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.editActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Gallery */
+.gallery {
+  padding-bottom: 80px;
+}
+
+.sectionTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 32px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.empty {
+  text-align: center;
+  padding: 80px 0;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border-subtle);
+}
+
+.empty p {
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+@media (max-width: 1024px) {
+  .profileRow {
+    grid-template-columns: 1fr;
+    text-align: center;
+    justify-items: center;
+  }
+  .stats {
+    justify-content: center;
+  }
+  .bio {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
