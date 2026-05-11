@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { signInWithGoogle } from '@/lib/supabase';
@@ -22,6 +23,14 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const { user, signOut, loading } = useAuth();
+  const router = useRouter();
+
+  const handleUploadClick = (e: React.MouseEvent) => {
+    if (!user) {
+      e.preventDefault();
+      signInWithGoogle();
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -121,7 +130,12 @@ export default function Navbar() {
             </AnimatePresence>
 
             {/* Upload Button */}
-            <Link href="/upload" className={styles.uploadBtn} id="navbar-upload">
+            <Link 
+              href="/upload" 
+              className={styles.uploadBtn} 
+              id="navbar-upload"
+              onClick={handleUploadClick}
+            >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                 <polyline points="17,8 12,3 7,8"/>
@@ -153,8 +167,8 @@ export default function Navbar() {
                   </button>
                 </div>
               ) : (
-                <button onClick={signInWithGoogle} className="btn-ghost" id="navbar-login">
-                  Sign In
+                <button onClick={signInWithGoogle} className="btn-primary" id="navbar-login" style={{ padding: '8px 16px' }}>
+                  Get Started
                 </button>
               )
             )}
@@ -230,7 +244,15 @@ export default function Navbar() {
               </nav>
 
               <div className={styles.mobileCta}>
-                <Link href="/upload" className="btn-primary" style={{ justifyContent: 'center', width: '100%' }} onClick={() => setMobileOpen(false)}>
+                <Link 
+                  href="/upload" 
+                  className="btn-primary" 
+                  style={{ justifyContent: 'center', width: '100%' }} 
+                  onClick={(e) => {
+                    setMobileOpen(false);
+                    handleUploadClick(e);
+                  }}
+                >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                     <polyline points="17,8 12,3 7,8"/>

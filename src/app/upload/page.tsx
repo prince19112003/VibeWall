@@ -64,7 +64,7 @@ export default function UploadPage() {
       // 2. Save to Supabase
       const { error: dbError } = await supabase.from('wallpapers').insert({
         title,
-        description: tags,
+        description: tags.split(/[\s,]+/).map(t => t.startsWith('#') ? t : `#${t}`).join(' '),
         artist_id: user.id,
         original_url: cloudData.secure_url,
         preview_url: cloudData.eager?.[0]?.secure_url || cloudData.secure_url,

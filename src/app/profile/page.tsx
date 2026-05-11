@@ -35,11 +35,12 @@ export default function ProfilePage() {
       async function loadUserData() {
         setLoading(true);
         // We get initial profile from user metadata or fetch it
-        if (!user) return;
+        if (!user?.id) return;
+        const currentUserId = user.id;
         const { data: profileData } = await (await import('@/lib/supabase')).supabase
           .from('profiles')
           .select('*')
-          .eq('id', user.id)
+          .eq('id', currentUserId)
           .single();
 
         if (profileData) {
