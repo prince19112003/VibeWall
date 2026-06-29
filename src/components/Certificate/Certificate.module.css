@@ -3,11 +3,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: clamp(40px, 8vh, 100px) 20px;
-  background: radial-gradient(circle at center, #1a1510 0%, #080808 100%);
+  justify-content: flex-start;
+  padding: 120px 20px 80px;
+  background: radial-gradient(circle at center, #0e0e1a 0%, #000000 100%);
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .flameAura {
@@ -17,59 +17,56 @@
   transform: translate(-50%, -50%);
   width: min(600px, 100vw);
   height: min(500px, 100vh);
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
   filter: blur(60px);
-  animation: pulse 4s ease-in-out infinite;
   pointer-events: none;
+}
+
+.certScrollContainer {
+  width: 100%;
+  overflow-x: auto;
+  display: flex;
+  padding: 20px 0;
+  justify-content: center;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 175, 55, 0.3) transparent;
+}
+
+@media (max-width: 640px) {
+  .certScrollContainer {
+    justify-content: flex-start;
+  }
 }
 
 .certificate {
-  position: relative;
-  width: 95%;
-  max-width: 840px; /* Wider for 4:3 */
-  aspect-ratio: 4 / 3;
-  background: #0a0a0a;
-  border-radius: 4px;
-  padding: 2em;
+  flex-shrink: 0;
+  width: 594px;
+  height: 840px; /* A4 Portrait size */
+  background: #ffffff; /* Light Theme */
+  border-radius: 8px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 50px 100px rgba(0,0,0,0.9), 0 0 100px rgba(245, 158, 11, 0.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), 0 0 40px rgba(212, 175, 55, 0.03);
   z-index: 2;
   overflow: hidden;
-  margin: 0 auto;
   font-size: 16px;
-}
-
-.fireContainer {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 200px;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.spark {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 4px; height: 4px;
-  background: var(--accent-gold);
-  border-radius: 50%;
-  filter: blur(1px);
+  box-sizing: border-box;
+  position: relative;
 }
 
 .goldFoilBorder {
   position: absolute;
   inset: 0;
-  border: 12px solid transparent;
-  border-image: linear-gradient(135deg, #f59e0b, #78350f, #fbbf24, #d97706) 1;
+  border: 10px solid transparent;
+  border-image: linear-gradient(135deg, #d4af37, #aa7c11, #ffd700, #b8860b) 1;
   z-index: 1;
 }
 
 .innerBorder {
   position: absolute;
-  inset: 24px;
-  border: 2px solid rgba(245, 158, 11, 0.4);
+  inset: 18px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
   z-index: 1;
 }
 
@@ -81,50 +78,53 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 2.5em;
-  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  padding: 30px 20px;
+  background: rgba(255, 255, 255, 0.8);
   overflow: hidden;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .header {
-  margin-bottom: 40px;
+  margin-top: 10px;
+  margin-bottom: 30px;
 }
 
 .logo {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .logoIcon {
-  width: 50px;
-  height: 50px;
-  background: linear-gradient(135deg, var(--accent-gold), #b45309);
-  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #d4af37, #b8860b);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #000;
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(212, 175, 55, 0.25);
 }
 
 .logoText {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.4em;
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: -0.02em;
+  font-size: 1.15em;
+  font-weight: 700;
+  color: #1c1917; /* Dark charcoal */
+  letter-spacing: -0.01em;
 }
 
 .official {
-  font-size: 0.4em;
-  letter-spacing: 0.3em;
-  color: var(--accent-gold);
+  font-size: 0.45em;
+  letter-spacing: 0.25em;
+  color: #b8860b;
   display: block;
-  margin-top: 0.2em;
+  margin-top: 0.1em;
+  font-weight: 800;
 }
 
 .mainBody {
@@ -133,85 +133,87 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px 0;
-}
-
-.dividerLine {
-  width: 100px;
-  height: 2px;
-  background: var(--accent-gold);
-  margin-bottom: 24px;
+  width: 100%;
+  padding: 10px 0;
 }
 
 .subTitle {
-  font-size: 0.9rem;
-  letter-spacing: 0.4em;
-  color: var(--accent-gold);
+  font-size: 0.85em;
+  letter-spacing: 0.35em;
+  color: #aa7c11;
   margin-bottom: 12px;
   font-weight: 700;
 }
 
+.dividerLine {
+  width: 80px;
+  height: 1.5px;
+  background: #d4af37;
+  margin-bottom: 24px;
+}
+
 .presentedTo {
-  font-size: 1rem;
+  font-size: 0.8em;
   font-weight: 600;
-  color: #888;
-  margin-bottom: 16px;
-  letter-spacing: 0.2em;
+  color: #78716c;
+  margin-bottom: 12px;
+  letter-spacing: 0.15em;
 }
 
 .artistName {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 3.5em; /* Bigger for 4:3 width */
+  font-size: 2.5em; /* Perfectly fits portrait */
   font-weight: 800;
-  color: #fff;
-  text-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
-  margin-bottom: 0.4em;
+  color: #1c1917;
+  text-shadow: 0 2px 10px rgba(212, 175, 55, 0.05);
+  margin-bottom: 0.5em;
   letter-spacing: -0.02em;
   width: 100%;
   overflow-wrap: break-word;
-  line-height: 1.1;
+  line-height: 1.15;
 }
 
 .statement {
-  color: var(--text-secondary);
-  font-size: 0.9em;
+  color: #44403c;
+  font-size: 0.85em;
   line-height: 1.6;
-  max-width: 100%;
-}
-
-.dateText {
-  margin-top: 1.5em;
-  font-size: 0.75em;
-  color: var(--text-muted);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  font-weight: 600;
+  max-width: 90%;
+  margin-bottom: 16px;
 }
 
 .highlight {
-  color: var(--accent-gold);
-  font-weight: 800;
+  color: #aa7c11;
+  font-weight: 700;
 }
 
 .wpTitle {
   font-style: italic;
-  color: #fff;
-  opacity: 0.8;
+  color: #1c1917;
+  font-weight: 600;
+}
+
+.dateText {
+  margin-top: 10px;
+  font-size: 0.7em;
+  color: #78716c;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 .footer {
   width: 100%;
   display: flex;
-  justify-content: space-between; /* Spread out for 4:3 */
+  justify-content: space-between;
   align-items: flex-end;
   gap: 1em;
   margin-top: auto;
-  padding-top: 1.5em;
-  padding-bottom: 0.5em;
+  padding-top: 20px;
+  padding-bottom: 10px;
 }
 
 .signGroup {
-  width: 12em; /* Fixed width for better alignment */
+  width: 10em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -219,119 +221,67 @@
 
 .signature {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.1em;
+  font-size: 1em;
   font-weight: 700;
-  color: #fff;
-  margin-bottom: 0.4em;
+  color: #1c1917;
+  margin-bottom: 0.3em;
 }
 
 .id {
   font-family: monospace;
   font-size: 0.7em;
-  color: var(--text-muted);
-  margin-bottom: 0.4em;
+  color: #78716c;
+  margin-bottom: 0.3em;
 }
 
 .signLine {
   width: 100%;
   height: 1px;
-  background: rgba(245, 158, 11, 0.3);
-  margin-bottom: 0.5em;
+  background: rgba(212, 175, 55, 0.4);
+  margin-bottom: 0.4em;
 }
 
 .signLabel {
-  font-size: 0.65em;
-  color: var(--text-muted);
+  font-size: 0.6em;
+  color: #78716c;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
+  font-weight: 600;
 }
 
 .seal {
-  width: 5.5em;
-  height: 5.5em;
-  border: 2px dashed var(--accent-gold);
+  width: 4.8em;
+  height: 4.8em;
+  border: 1.5px dashed #d4af37;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5em;
-  animation: spin 20s linear infinite;
+  padding: 0.4em;
 }
 
 .sealInner {
   width: 100%;
   height: 100%;
-  background: rgba(245, 158, 11, 0.1);
+  background: rgba(212, 175, 55, 0.08);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
 }
 
 .sealYear {
-  font-weight: 900;
-  color: var(--accent-gold);
-  font-size: 0.8em;
-}
-
-.sealText {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  font-size: 0.4rem;
-  font-weight: 900;
-  color: var(--accent-gold);
-  letter-spacing: 0.5em;
-  /* Simulating circular text with a placeholder */
-  display: none; 
-}
-
-.date {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  letter-spacing: 0.2em;
-}
-
-.shine {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.05),
-    transparent
-  );
-  transform: skewX(-20deg);
-  pointer-events: none;
-  z-index: 3;
+  font-weight: 800;
+  color: #b8860b;
+  font-size: 0.75em;
+  letter-spacing: 0.05em;
 }
 
 .actions {
-  margin-top: 40px;
+  margin-top: 30px;
   display: flex;
   gap: 16px;
-}
-
-@media (max-width: 640px) {
-  .certificate {
-    font-size: 14px;
-    max-width: 90%;
-  }
-}
-
-@media (max-width: 480px) {
-  .certificate {
-    font-size: 11px;
-    max-width: 95%;
-  }
+  z-index: 5;
 }
 
 @media print {

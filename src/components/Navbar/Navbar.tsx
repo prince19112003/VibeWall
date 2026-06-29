@@ -6,11 +6,9 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
-import { signInWithGoogle } from '@/lib/supabase';
 import styles from './Navbar.module.css';
 
 const navLinks = [
-  { href: '/', label: 'Discover' },
   { href: '/#tournament', label: 'Tournament' },
   { href: '/artists', label: 'Top Artists' },
   { href: '/feed', label: '👥 Feed' },
@@ -21,16 +19,16 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [mobileSearchVal, setMobileSearchVal] = useState('');
 
-  const { user, signOut, loading } = useAuth();
+  const { user, signIn, signOut, loading } = useAuth();
   const router = useRouter();
 
   const handleUploadClick = (e: React.MouseEvent) => {
-    if (!user) {
-      e.preventDefault();
-      signInWithGoogle();
-    }
+    // Permitting direct navigation to the upload page
   };
+
+
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -96,6 +94,11 @@ export default function Navbar() {
                     placeholder="Search wallpapers..."
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && searchQuery.trim()) {
+                        router.push(`/explore?q=${encodeURIComponent(searchQuery.trim())}`);
+                      }
+                    }}
                     className={styles.searchInput}
                     onBlur={() => { if (!searchQuery) setSearchOpen(false); }}
                     id="navbar-search"
@@ -167,7 +170,7 @@ export default function Navbar() {
                   </button>
                 </div>
               ) : (
-                <button onClick={signInWithGoogle} className="btn-primary" id="navbar-login" style={{ padding: '8px 16px' }}>
+                <button onClick={signIn} className="btn-primary" id="navbar-login" style={{ padding: '8px 16px' }}>
                   Get Started
                 </button>
               )
@@ -219,11 +222,23 @@ export default function Navbar() {
                 </button>
               </div>
 
-              <div className={styles.mobileSearch}>
+               <div className={styles.mobileSearch}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
                 </svg>
-                <input type="text" placeholder="Search wallpapers..." className={styles.mobileSearchInput} />
+                <input 
+                  type="text" 
+                  placeholder="Search wallpapers..." 
+                  className={styles.mobileSearchInput} 
+                  value={mobileSearchVal}
+                  onChange={e => setMobileSearchVal(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && mobileSearchVal.trim()) {
+                      setMobileOpen(false);
+                      router.push(`/explore?q=${encodeURIComponent(mobileSearchVal.trim())}`);
+                    }
+                  }}
+                />
               </div>
 
               <nav>
@@ -271,7 +286,7 @@ export default function Navbar() {
                       </button>
                     </>
                   ) : (
-                    <button onClick={signInWithGoogle} className="btn-ghost" style={{ justifyContent: 'center', width: '100%' }}>
+                    <button onClick={signIn} className="btn-ghost" style={{ justifyContent: 'center', width: '100%' }}>
                       Sign In
                     </button>
                   )

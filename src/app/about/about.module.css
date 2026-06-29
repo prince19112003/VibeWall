@@ -1,0 +1,141 @@
+.main {
+  min-height: 100vh;
+  padding: 120px 20px 60px;
+  background: radial-gradient(circle at 50% 0%, #1a1528 0%, #0b0813 100%);
+  color: #ffffff;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #a0a0ab;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.cardTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #a0a0ab 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cardText {
+  color: #d4d4d8;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.teamSection {
+  text-align: center;
+  margin-top: 80px;
+}
+
+.sectionTitle {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 40px;
+}
+
+.teamGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+@media (max-width: 580px) {
+  .teamGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.memberCard {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 30px;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.memberCard:hover {
+  transform: translateY(-5px);
+  border-color: rgba(168, 85, 247, 0.4);
+}
+
+.memberAvatar {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.memberName {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.memberRole {
+  color: #a855f7;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #a855f7;
+  text-decoration: none;
+  font-weight: 600;
+  margin-bottom: 30px;
+  transition: color 0.2s ease;
+}
+
+.backBtn:hover {
+  color: #c084fc;
+}

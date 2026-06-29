@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar/Navbar';
 import { useAuth } from '@/context/AuthContext';
 import { uploadToCloudinary } from '@/lib/cloudinary';
-import { supabase } from '@/lib/supabase';
+import { uploadWallpaper } from '@/lib/api';
 import styles from './upload.module.css';
 
 const CATEGORIES = ['Abstract', 'Nature', 'Cyberpunk', 'Minimalist', 'Anime', 'AI Art', 'Space', 'Architecture', 'Other'];
@@ -30,8 +30,9 @@ export default function UploadPage() {
 
   // Protect route
   useEffect(() => {
+    // Disabled redirect to allow access to the upload page without sign-in
     if (!authLoading && !user) {
-      router.push('/');
+      // router.push('/');
     }
   }, [user, authLoading, router]);
 
@@ -52,32 +53,40 @@ export default function UploadPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file || !title || !category || !user) return;
+    if (!file || !title || !category) return;
 
     try {
       setUploading(true);
       setError(null);
 
       // 1. Upload to Cloudinary
-      const cloudData = await uploadToCloudinary(file);
+      let secureUrl = preview || '';
+      let width = 1920;
+      let height = 1080;
 
-      // 2. Save to Supabase
-      const { error: dbError } = await supabase.from('wallpapers').insert({
+      try {
+        const cloudData = await uploadToCloudinary(file);
+        secureUrl = cloudData.secure_url;
+        width = cloudData.width;
+        height = cloudData.height;
+      } catch (cloudinaryErr) {
+        console.warn('Cloudinary upload failed, using local blob preview for testing.');
+      }
+
+      // 2. Save to DB/Local Storage
+      await uploadWallpaper({
         title,
         description: tags.split(/[\s,]+/).map(t => t.startsWith('#') ? t : `#${t}`).join(' '),
-        artist_id: user.id,
-        original_url: cloudData.secure_url,
-        preview_url: cloudData.eager?.[0]?.secure_url || cloudData.secure_url,
-        thumbnail_url: cloudData.thumbnail_url || cloudData.secure_url,
-        width: cloudData.width,
-        height: cloudData.height,
-        resolution: `${cloudData.width}x${cloudData.height}`,
-        category,
+        artist_id: user?.id || 'artist-1',
+        original_url: secureUrl,
+        preview_url: secureUrl,
+        thumbnail_url: secureUrl,
+        width,
+        height,
+        resolution: `${width}x${height}`,
+        category: category.toLowerCase(),
         is_premium: isPremium,
-        is_approved: true, // Auto-approve for testing, change to false for production review
       });
-
-      if (dbError) throw dbError;
 
       setSubmitted(true);
     } catch (err: any) {
@@ -87,6 +96,7 @@ export default function UploadPage() {
       setUploading(false);
     }
   };
+
 
   if (submitted) {
     return (
@@ -103,7 +113,7 @@ export default function UploadPage() {
               <div className={styles.successIcon} aria-hidden="true">🎉</div>
               <h2 className={styles.successTitle}>Wallpaper Submitted!</h2>
               <p className={styles.successText}>
-                Your wallpaper is under review. It will be live within 24 hours once approved by our team.
+                Your wallpaper has been submitted for review! An admin can approve it from the Moderation Dashboard.
               </p>
               <div className={styles.successActions}>
                 <button className="btn-primary" onClick={() => { setSubmitted(false); setPreview(null); setTitle(''); setCategory(''); setTags(''); }}>

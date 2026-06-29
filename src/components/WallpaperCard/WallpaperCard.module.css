@@ -11,8 +11,8 @@
 }
 
 .card:hover {
-  border-color: rgba(124, 58, 237, 0.3);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(124, 58, 237, 0.15);
+  border-color: rgba(0, 122, 255, 0.3);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 122, 255, 0.15);
 }
 
 /* --- Image --- */
@@ -118,12 +118,12 @@
   align-items: center;
   gap: 6px;
   padding: 8px 18px;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-pink));
+  background: var(--accent-primary);
   border-radius: var(--radius-full);
   font-size: 0.8rem;
   font-weight: 600;
   color: #fff;
-  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 122, 255, 0.3);
 }
 
 /* --- Footer --- */

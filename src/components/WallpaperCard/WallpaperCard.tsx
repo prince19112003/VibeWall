@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { type Wallpaper } from '@/lib/api';
+import { type Wallpaper, likeWallpaper, unlikeWallpaper } from '@/lib/api';
 import styles from './WallpaperCard.module.css';
 
 interface WallpaperCardProps {
@@ -120,7 +120,16 @@ export default function WallpaperCard({ wallpaper, index = 0, onPreview }: Wallp
         <div className={styles.actions}>
           <button
             className={`${styles.actionBtn} ${liked ? styles.liked : ''}`}
-            onClick={() => setLiked(!liked)}
+            onClick={async () => {
+              setLiked(!liked);
+              try {
+                if (!liked) {
+                  await likeWallpaper(wallpaper.id);
+                } else {
+                  await unlikeWallpaper(wallpaper.id);
+                }
+              } catch (e) { console.error('Like failed', e); }
+            }}
             aria-label={liked ? 'Unlike' : 'Like'}
             title={liked ? 'Unlike' : 'Like'}
           >

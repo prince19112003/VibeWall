@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { toPng } from 'html-to-image';
 import styles from './Certificate.module.css';
@@ -27,7 +27,13 @@ export default function Certificate({
     if (certificateRef.current === null) return;
     
     try {
-      const dataUrl = await toPng(certificateRef.current, { cacheBust: true, pixelRatio: 2 });
+      const dataUrl = await toPng(certificateRef.current, {
+        cacheBust: true,
+        pixelRatio: 2,
+        width: 1188,  // A4 Portrait ratio (2x scale of 594x840)
+        height: 1680
+      });
+      
       const link = document.createElement('a');
       link.download = `VibeWalls-Certificate-${artistName.replace(/\s+/g, '-')}.png`;
       link.href = dataUrl;
@@ -42,13 +48,11 @@ export default function Certificate({
       {/* Background Aura / Flame Effect */}
       <div className={styles.flameAura} />
       
-      <motion.div 
-        ref={certificateRef}
-        className={styles.certificate}
-        initial={{ opacity: 0, scale: 0.9, filter: 'brightness(0) blur(20px)' }}
-        animate={{ opacity: 1, scale: 1, filter: 'brightness(1) blur(0px)' }}
-        transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-      >
+      <div className={styles.certScrollContainer}>
+        <div 
+          ref={certificateRef}
+          className={styles.certificate}
+        >
         {/* Flame Particles */}
         <div className={styles.fireContainer}>
           {[0, 1, 2, 3, 4, 5].map((i) => (
@@ -122,7 +126,8 @@ export default function Certificate({
 
         {/* Golden Shine Overlay (Animated but subtle) */}
         <div className={styles.shineOverlay} />
-      </motion.div>
+      </div>
+      </div>
 
       {/* Action Buttons */}
       <motion.div 

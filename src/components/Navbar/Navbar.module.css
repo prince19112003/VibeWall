@@ -1,19 +1,30 @@
 .navbar {
   position: fixed;
-  top: 0;
+  top: 20px;
   left: 0;
   right: 0;
+  margin: 0 auto;
+  width: calc(100% - 40px);
+  max-width: var(--max-width);
   z-index: 1000;
-  height: var(--nav-height);
-  transition: background 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease;
-  border-bottom: 1px solid transparent;
+  height: 64px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(3, 3, 7, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-full);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
 .navbar.scrolled {
-  background: rgba(3, 3, 7, 0.85); /* Matches new bg-primary */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-color: var(--border-subtle);
+  background: rgba(3, 3, 7, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-color: rgba(139, 92, 246, 0.2);
+  box-shadow: 0 10px 40px rgba(139, 92, 246, 0.15);
+  top: 10px;
+  height: 60px;
 }
 
 .navInner {
@@ -21,7 +32,6 @@
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 24px;
   gap: 24px;
@@ -275,19 +285,31 @@
 /* ============================================================
    RESPONSIVE
    ============================================================ */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .navLinks { display: none; }
-  .uploadBtn span { display: none; }
-  .uploadBtn { padding: 9px 12px; }
-}
-
-@media (max-width: 640px) {
   .hamburger { display: flex; }
   .mobileOverlay { display: block; }
   .mobileMenu { display: flex; }
   .uploadBtn { display: none; }
-
   :global(.btn-ghost) { display: none; }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    top: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    border-radius: 0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    height: 60px;
+  }
+  .navbar.scrolled {
+    top: 0;
+    height: 60px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -315,9 +337,7 @@
   transform: scale(1.1);
 }
 .specialLink {
-  background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--text-primary);
   font-weight: 800 !important;
   position: relative;
   text-transform: uppercase;
@@ -325,6 +345,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .specialLink::after {
@@ -333,11 +354,20 @@
   font-size: 1.1rem;
   -webkit-text-fill-color: initial;
   filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.4));
+  transition: transform 0.3s ease;
 }
 
 .specialLink:hover {
-  text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+  transform: translateY(-1px) scale(1.03);
+}
+
+.specialLink:hover::after {
+  transform: scale(1.1);
 }
 
 .mobileTournamentLink {

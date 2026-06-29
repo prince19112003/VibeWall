@@ -3,15 +3,18 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import styles from './Preloader.module.css';
 
 export default function Preloader() {
   const [loading, setLoading] = useState(true);
+  const pathname = usePathname();
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 3000);
+    setLoading(true);
+    const timer = setTimeout(() => setLoading(false), 1200); // Faster splash screen (1.2 seconds)
     return () => clearTimeout(timer);
-  }, []);
+  }, [pathname]); // Re-trigger on route changes (back button, link clicks)
 
   return (
     <AnimatePresence mode="wait">
@@ -21,7 +24,7 @@ export default function Preloader() {
           key="loader"
           exit={{ 
             opacity: 0,
-            transition: { duration: 0.6, ease: "easeInOut" } 
+            transition: { duration: 0.4, ease: "easeInOut" } 
           }}
         >
           {/* 1. Optimized Liquid Blobs */}
@@ -72,22 +75,9 @@ export default function Preloader() {
                 className={styles.progressFill}
                 initial={{ scaleX: 0, originX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ duration: 2.5, ease: "easeInOut" }}
+                transition={{ duration: 0.9, ease: "easeInOut" }} // Faster progress bar fill
               />
             </div>
-
-            {/* 6. Skip Button */}
-            <motion.button
-              className={styles.skipBtn}
-              onClick={() => setLoading(false)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.5, duration: 0.5 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Skip Intro
-            </motion.button>
           </div>
         </motion.div>
       )}

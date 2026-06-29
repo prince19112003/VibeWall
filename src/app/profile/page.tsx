@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar/Navbar';
 import WallpaperCard from '@/components/WallpaperCard/WallpaperCard';
 import { useAuth } from '@/context/AuthContext';
-import { getUserWallpapers, updateProfile, type Wallpaper, type Profile } from '@/lib/api';
+import { getUserWallpapers, updateProfile, getLocalWallpapers, type Wallpaper, type Profile } from '@/lib/api';
 import styles from './profile.module.css';
 
 export default function ProfilePage() {
@@ -34,24 +35,52 @@ export default function ProfilePage() {
     if (user) {
       async function loadUserData() {
         setLoading(true);
-        // We get initial profile from user metadata or fetch it
-        if (!user?.id) return;
-        const currentUserId = user.id;
-        const { data: profileData } = await (await import('@/lib/supabase')).supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', currentUserId)
-          .single();
+        
+        // Try Supabase first, fallback to mock
+        try {
+          const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+          if (supabaseUrl && !supabaseUrl.includes('dummy') && !supabaseUrl.includes('placeholder')) {
+            const { data: profileData } = await (await import('@/lib/supabase')).supabase
+              .from('profiles')
+              .select('*')
+              .eq('id', user!.id)
+              .single();
 
-        if (profileData) {
-          setProfile(profileData);
-          setFullName(profileData.full_name || '');
-          setBio(profileData.bio || '');
-          setUsername(profileData.username || '');
-          
-          const walls = await getUserWallpapers(user.id);
-          setWallpapers(walls);
+            if (profileData) {
+              setProfile(profileData);
+              setFullName(profileData.full_name || '');
+              setBio(profileData.bio || '');
+              setUsername(profileData.username || '');
+              
+              const walls = await getUserWallpapers(user!.id);
+              setWallpapers(walls);
+              setLoading(false);
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn('Supabase profile fetch failed, using mock profile');
         }
+
+        // Mock fallback: Build profile from user metadata
+        const mockProfile: Profile = {
+          id: user!.id,
+          username: user!.user_metadata?.username || 'vibe_artist',
+          full_name: user!.user_metadata?.full_name || 'Vibe Artist',
+          avatar_url: user!.user_metadata?.avatar_url || 'https://api.dicebear.com/7.x/bottts/svg?seed=Vibe',
+          bio: 'Welcome to VibeWalls! Upload your first wallpaper to get started.',
+          is_verified: false,
+          follower_count: 0
+        };
+        setProfile(mockProfile);
+        setFullName(mockProfile.full_name || '');
+        setBio(mockProfile.bio || '');
+        setUsername(mockProfile.username);
+
+        // Get user wallpapers from local storage
+        const allWalls = getLocalWallpapers();
+        const userWalls = allWalls.filter(w => w.artist_id === user!.id);
+        setWallpapers(userWalls);
         setLoading(false);
       }
       loadUserData();
@@ -78,7 +107,16 @@ export default function ProfilePage() {
   };
 
   if (loading || authLoading) {
-    return <div className="loader-container"><div className="loader"></div></div>;
+    return (
+      <>
+        <Navbar />
+        <main className={styles.main}>
+          <div className="container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+            <span className="loader">Loading Profile...</span>
+          </div>
+        </main>
+      </>
+    );
   }
 
   return (
@@ -94,7 +132,7 @@ export default function ProfilePage() {
             <div className={styles.profileRow}>
               <div className={styles.avatarWrap}>
                 <Image 
-                  src={user?.user_metadata.avatar_url || '/default-avatar.png'} 
+                  src={user?.user_metadata?.avatar_url || profile?.avatar_url || '/default-avatar.png'} 
                   alt="Avatar" 
                   width={120} 
                   height={120} 
@@ -134,7 +172,7 @@ export default function ProfilePage() {
                   </div>
                 ) : (
                   <>
-                    <h1 className={styles.name}>{profile?.full_name || user?.user_metadata.full_name}</h1>
+                    <h1 className={styles.name}>{profile?.full_name || user?.user_metadata?.full_name}</h1>
                     <p className={styles.username}>@{profile?.username || 'user'}</p>
                     <p className={styles.bio}>{profile?.bio || 'No bio yet. Tell the world about your vibe!'}</p>
                     <button className="btn-ghost" onClick={() => setIsEditing(true)}>Edit Profile</button>
@@ -175,5 +213,3 @@ export default function ProfilePage() {
     </>
   );
 }
-
-import Link from 'next/link';

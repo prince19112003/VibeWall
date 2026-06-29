@@ -37,6 +37,13 @@ export default function ExplorePage() {
       setLoading(false);
     }
     loadData();
+
+    // Check for q param in window URL
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('q');
+      if (q) setQuery(q);
+    }
   }, []);
 
   const filtered = useMemo(() => {

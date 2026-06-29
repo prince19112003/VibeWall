@@ -53,6 +53,8 @@ export default function HomePage() {
       <main className={styles.main}>
         {/* ============ HERO ============ */}
         <section className={styles.hero} aria-label="Hero section">
+          <div className={styles.glowBlob1} aria-hidden="true" />
+          <div className={styles.glowBlob2} aria-hidden="true" />
           <div className="container">
             <motion.div className={styles.heroContent}
               initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
@@ -307,8 +309,18 @@ export default function HomePage() {
                 <p className={styles.footerTagline}>The premium wallpaper community.</p>
               </div>
               <nav className={styles.footerLinks} aria-label="Footer navigation">
-                {['Discover', 'Explore', 'Artists', 'Upload', 'Pro', 'About', 'Privacy', 'Terms'].map(link => (
-                  <a key={link} href="#" className={styles.footerLink}>{link}</a>
+                {[
+                  { name: 'Explore', href: '/explore' },
+                  { name: 'Artists', href: '/artists' },
+                  { name: 'Upload', href: '/upload' },
+                  { name: 'About', href: '/about' },
+                  { name: 'Privacy', href: '/privacy' },
+                  { name: 'Terms', href: '/terms' },
+                  { name: 'Moderation', href: '/admin' }
+                ].map(link => (
+                  <Link key={link.name} href={link.href} className={styles.footerLink}>
+                    {link.name}
+                  </Link>
                 ))}
               </nav>
             </div>

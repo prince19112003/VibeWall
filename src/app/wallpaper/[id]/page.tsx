@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar/Navbar';
-import { getWallpaperById, getWallpapers, type Wallpaper } from '@/lib/api';
+import { getWallpaperById, getWallpapers, likeWallpaper, unlikeWallpaper, downloadWallpaperFile, type Wallpaper } from '@/lib/api';
 import styles from './wallpaper.module.css';
 
 export default function WallpaperDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -268,7 +268,13 @@ export default function WallpaperDetailPage({ params }: { params: Promise<{ id: 
                 </motion.button>
 
                 <button className={`btn-icon ${liked ? styles.likedIcon : ''}`}
-                  onClick={() => setLiked(!liked)} aria-label={liked ? 'Unlike' : 'Like'}
+                  onClick={async () => {
+                    setLiked(!liked);
+                    try {
+                      if (!liked) await likeWallpaper(wallpaper.id);
+                      else await unlikeWallpaper(wallpaper.id);
+                    } catch (e) { console.error('Like failed', e); }
+                  }} aria-label={liked ? 'Unlike' : 'Like'}
                   style={{ width: '48px', height: '48px' }}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill={liked ? '#ec4899' : 'none'} stroke={liked ? '#ec4899' : 'currentColor'} strokeWidth="2">
                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
@@ -325,6 +331,13 @@ export default function WallpaperDetailPage({ params }: { params: Promise<{ id: 
               <div className={styles.modalOptions}>
                 {resolutions.map((res, i) => (
                   <motion.button key={res.label} className={`${styles.resOption} ${!res.free ? styles.premiumOption : ''}`}
+                    onClick={() => {
+                      if (res.free || wallpaper.is_premium) {
+                        downloadWallpaperFile(wallpaper.original_url, `${wallpaper.title.replace(/\s+/g, '_')}_${res.label}.jpg`);
+                      } else {
+                        alert('Premium feature: Watch ad to download');
+                      }
+                    }}
                     initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.06 }} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
                     id={`download-${res.label.toLowerCase().replace(' ', '-')}`}>
